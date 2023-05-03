@@ -44,6 +44,8 @@ function Sortingvisualizer() {
     function mergeSort(){
 
         const animations = sortingAlgorithms.getMergeSortAnimations(array);
+        console.log("animations: ", animations);
+
         for (let i = 0; i < animations.length; i++) {
           const arrayBarsF = document.getElementsByClassName('bar front color');
           const arrayBarsB = document.getElementsByClassName('bar back color');
@@ -57,6 +59,8 @@ function Sortingvisualizer() {
           const isColorChange = i % 3 !== 2;
           if (isColorChange) {
             const [barOneIdx, barTwoIdx] = animations[i];
+            console.log("barOneIdx: ", barOneIdx);
+                console.log("barTwoIdx: ", barTwoIdx);
             const barOneStyle = arrayBarsF[barOneIdx].style;
             const barTwoStyle = arrayBarsF[barTwoIdx].style;
 
@@ -115,21 +119,179 @@ function Sortingvisualizer() {
           }
         }
 
+
+
         
     }
 
     function bubbleSort(){
-        var n = array.length;
-        for(var i = 0; i < n; i++){
-            for(var j = 0; j < n-i-1; j++){
-                if(array[j] > array[j+1]){
-                    var temp = array[j];
-                    array[j] = array[j+1];
-                    array[j+1] = temp;
+        const animations = sortingAlgorithms.getBubbleSortAnimations(array);
+        console.log("animationsB: ", animations);
+
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBarsF = document.getElementsByClassName('bar front color');
+            const arrayBarsB = document.getElementsByClassName('bar back color');
+            const arrayBarsL = document.getElementsByClassName('bar left color');
+            const arrayBarsR = document.getElementsByClassName('bar right color');
+
+
+
+            const isColorChange = i % 3 !== 2;
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = animations[i];
+                console.log("barOneIdx: ", barOneIdx);
+                    console.log("barTwoIdx: ", barTwoIdx);
+                const barOneStyle = arrayBarsF[barOneIdx].style;
+                const barTwoStyle = arrayBarsF[barTwoIdx].style;
+    
+                const barOneStyleB = arrayBarsB[barOneIdx].style;
+                const barTwoStyleB = arrayBarsB[barTwoIdx].style;
+    
+                const barOneStyleL = arrayBarsL[barOneIdx].style;
+                const barTwoStyleL = arrayBarsL[barTwoIdx].style;
+    
+                const barOneStyleR = arrayBarsR[barOneIdx].style;
+                const barTwoStyleR = arrayBarsR[barTwoIdx].style;
+    
+    
+    
+                const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                setTimeout(() => {
+                  barOneStyle.backgroundColor = color;
+                  barTwoStyle.backgroundColor = color;
+                    barOneStyleB.backgroundColor = color;
+                    barTwoStyleB.backgroundColor = color;
+    
+                    barOneStyleL.backgroundColor = color;
+                    barTwoStyleL.backgroundColor = color;
+    
+                    barOneStyleR.backgroundColor = color;
+                    barTwoStyleR.backgroundColor = color;
+    
+    
+    
+                }, i * ANIMATION_SPEED_MS);
+              } else {
+                setTimeout(() => {
+                  const [barOneIdx, barTwoIdx, b1height, b2height] = animations[i];
+            
+                  console.log("b1height and idx: ", b1height, barOneIdx)
+                    console.log("b2height and idx: ", b2height , barTwoIdx)
+
+                  var barOneStyle = arrayBarsF[barOneIdx].style;
+                  var barOneStyleB = arrayBarsB[barOneIdx].style;
+                  var barOneStyleL = arrayBarsL[barOneIdx].style;
+                  var barOneStyleR = arrayBarsR[barOneIdx].style;
+
+                  var barTwoStyle = arrayBarsF[barTwoIdx].style;
+                    var barTwoStyleB = arrayBarsB[barTwoIdx].style;
+                    var barTwoStyleL = arrayBarsL[barTwoIdx].style;
+                    var barTwoStyleR = arrayBarsR[barTwoIdx].style;
+
+
+                  if(b1height > b2height){
+                    barOneStyle.height = `${b2height}vh`;
+                    barOneStyleB.height = `${b2height}vh`;
+                    barOneStyleL.height = `${b2height}vh`;
+                    barOneStyleR.height = `${b2height}vh`;
+                    barOneStyle.transform = `translateY(${90 - b2height}vh)`;
+
+                    barOneStyleB.transform = `translateY(${90 - b2height}vh)`;
+                    barOneStyleL.transform = `translateY(${90 - b2height}vh)`;
+                    barOneStyleR.transform = `translateY(${90 - b2height}vh)`;
+
+                    document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = b2height;
+
+                    barTwoStyle = arrayBarsF[barTwoIdx].style;
+                    barTwoStyleB = arrayBarsB[barTwoIdx].style;
+                    barTwoStyleL = arrayBarsL[barTwoIdx].style;
+                    barTwoStyleR = arrayBarsR[barTwoIdx].style;
+
+                    barTwoStyle.height = `${b1height}vh`;
+                    barTwoStyleB.height = `${b1height}vh`;
+                    barTwoStyleL.height = `${b1height}vh`;
+                    barTwoStyleR.height = `${b1height}vh`;
+                    barTwoStyle.transform = `translateY(${90 - b1height}vh)`;
+                    barTwoStyleB.transform = `translateY(${90 - b1height}vh)`;
+                    barTwoStyleL.transform = `translateY(${90 - b1height}vh)`;
+                    barTwoStyleR.transform = `translateY(${90 - b1height}vh)`;
+
+                    document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = b1height;
+
+                    }
+                    else{
+                        barOneStyle.height = `${b1height}vh`;
+                        barOneStyleB.height = `${b1height}vh`;
+                        barOneStyleL.height = `${b1height}vh`;
+                        barOneStyleR.height = `${b1height}vh`;
+                        barOneStyle.transform = `translateY(${90 - b1height}vh)`;
+                        barOneStyleB.transform = `translateY(${90 - b1height}vh)`;
+                        barOneStyleL.transform = `translateY(${90 - b1height}vh)`;
+                        barOneStyleR.transform = `translateY(${90 - b1height}vh)`;
+
+                        document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = b1height;
+
+                        barTwoStyle = arrayBarsF[barTwoIdx].style;
+                        barTwoStyleB = arrayBarsB[barTwoIdx].style;
+                        barTwoStyleL = arrayBarsL[barTwoIdx].style;
+                        barTwoStyleR = arrayBarsR[barTwoIdx].style;
+
+                        barTwoStyle.height = `${b2height}vh`;
+                        barTwoStyleB.height = `${b2height}vh`;
+                        barTwoStyleL.height = `${b2height}vh`;
+                        barTwoStyleR.height = `${b2height}vh`;
+                        barTwoStyle.transform = `translateY(${90 - b2height}vh)`;
+                        barTwoStyleB.transform = `translateY(${90 - b2height}vh)`;
+                        barTwoStyleL.transform = `translateY(${90 - b2height}vh)`;
+                        barTwoStyleR.transform = `translateY(${90 - b2height}vh)`;
+
+                        document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = b2height;
+                    }
+
+                
+
+    
+                //   barOneStyle.height = `${b1height}vh`;
+                //     barOneStyleB.height = `${b1height}vh`;
+                //     barOneStyleL.height = `${b1height}vh`;
+                //     barOneStyleR.height = `${b1height}vh`;
+                //   barOneStyle.transform = `translateY(${90 - b1height}vh)`;
+                //     barOneStyleB.transform = `translateY(${90 - b1height}vh)`;
+                //     barOneStyleL.transform = `translateY(${90 - b1height}vh)`;
+                //     barOneStyleR.transform = `translateY(${90 - b1height}vh)`;
+
+
+                    // const barTwoStyle = arrayBarsF[barTwoIdx].style;
+                    // const barTwoStyleB = arrayBarsB[barTwoIdx].style;
+                    // const barTwoStyleL = arrayBarsL[barTwoIdx].style;
+                    // const barTwoStyleR = arrayBarsR[barTwoIdx].style;
+                    // document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = b1height;
+                    // document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = b2height;
+
+                    // barTwoStyle.height = `${b2height}vh`;
+                    // barTwoStyleB.height = `${b2height}vh`;
+                    // barTwoStyleL.height = `${b2height}vh`;
+                    // barTwoStyleR.height = `${b2height}vh`;
+                    // barTwoStyle.transform = `translateY(${90 - b2height}vh)`;
+                    // barTwoStyleB.transform = `translateY(${90 - b2height}vh)`;
+                    // barTwoStyleL.transform = `translateY(${90 - b2height}vh)`;
+                    // barTwoStyleR.transform = `translateY(${90 - b2height}vh)`;
+                    
+    
+
+    
+    
+    
+    
+    
                 }
+                , i * ANIMATION_SPEED_MS);
+                
+              }
             }
         }
-    }
+
+
 
     function arraysAreEqual(arrayOne, arrayTwo){
         if(arrayOne.length !== arrayTwo.length) return false;
@@ -153,7 +315,9 @@ function Sortingvisualizer() {
     <>
 
     <div className="buttonBox">
-        <button className="button" onClick={mergeSort}>Sort Array</button>
+        <button className="button" onClick={bubbleSort}>Bubble Sort Array</button>
+        <button className="button" onClick={mergeSort}>Merge Sort Array</button>
+
         <button className="button" onClick={createArray}>Generate Array</button>
 
     </div>
