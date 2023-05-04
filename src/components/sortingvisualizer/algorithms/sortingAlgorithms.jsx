@@ -62,6 +62,40 @@ export function getMergeSortAnimations(array) {
   return animations;
 }
 
+export function getInsertionSortAnimations(array) {
+  const animations = [];
+  if (array.length <= 1) return array;
+  const auxiliaryArray = array.slice();
+  
+  for (let i = 1; i < auxiliaryArray.length; i++) {
+    let key = auxiliaryArray[i];
+    let j = i - 1;
+    // push indices of the elements being compared
+    animations.push([j, i]);
+    while (j >= 0 && auxiliaryArray[j] > key) {
+      // push indices and values of the elements being swapped
+
+      [auxiliaryArray[j], auxiliaryArray[j+1]] = [auxiliaryArray[j+1], auxiliaryArray[j]];
+      animations.push([j, j+1, auxiliaryArray[j] ,auxiliaryArray[j+1], false]);
+      animations.push([j, j+1, auxiliaryArray[j] ,auxiliaryArray[j+1], true]);
+
+      
+
+
+      j = j - 1;
+    }
+    auxiliaryArray[j+1] = key;
+  }
+
+
+  console.log(auxiliaryArray);
+
+  return animations;
+
+
+
+}
+
 export function getBubbleSortAnimations(array) {
   const animations = [];
   if (array.length <= 1) return array;

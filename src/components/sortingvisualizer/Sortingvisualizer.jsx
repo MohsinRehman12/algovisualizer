@@ -39,6 +39,7 @@ function Sortingvisualizer() {
             array.push(getRandomIntRange(5, 90));
         }
         setArray(array);
+        console.log("array: ", array);
     }
 
     function mergeSort(){
@@ -118,8 +119,126 @@ function Sortingvisualizer() {
             }, i * ANIMATION_SPEED_MS);
           }
         }
+        setArray(array.sort(function(a, b){return a-b}));
 
 
+
+        
+    }
+
+
+    function insertionSort(){
+        const animations = sortingAlgorithms.getInsertionSortAnimations(array);
+        console.log("animationsI: ", animations);
+
+        for (let i = 0; i < animations.length; i++) {
+
+            
+            
+            const [barOneIdx, barTwoIdx, barOneH, barTwoH, swap] = animations[i];
+            
+            setTimeout(() => {
+
+                var arrayBarsF = document.getElementsByClassName('bar front color');
+                var arrayBarsB = document.getElementsByClassName('bar back color');
+                var arrayBarsL = document.getElementsByClassName('bar left color');
+                var arrayBarsR = document.getElementsByClassName('bar right color');
+
+                var arrayBarsValue = document.getElementsByClassName('bar value');
+
+                var barOneStyle = arrayBarsF[barOneIdx].style;
+                var barTwoStyle = arrayBarsF[barTwoIdx].style;
+
+                var barOneStyleB = arrayBarsB[barOneIdx].style;
+                var barTwoStyleB = arrayBarsB[barTwoIdx].style;
+
+                var barOneStyleL = arrayBarsL[barOneIdx].style;
+                var barTwoStyleL = arrayBarsL[barTwoIdx].style;
+
+                var barOneStyleR = arrayBarsR[barOneIdx].style;
+                var barTwoStyleR = arrayBarsR[barTwoIdx].style;
+
+                barOneStyle.backgroundColor = SECONDARY_COLOR;
+                barTwoStyle.backgroundColor = SECONDARY_COLOR;
+
+                barOneStyleB.backgroundColor = SECONDARY_COLOR;
+                barTwoStyleB.backgroundColor = SECONDARY_COLOR;
+
+                barOneStyleL.backgroundColor = SECONDARY_COLOR;
+                barTwoStyleL.backgroundColor = SECONDARY_COLOR;
+
+                barOneStyleR.backgroundColor = SECONDARY_COLOR;
+                barTwoStyleR.backgroundColor = SECONDARY_COLOR;
+
+
+                
+
+
+            if(swap){
+
+                barOneStyle.backgroundColor = PRIMARY_COLOR;
+                barTwoStyle.backgroundColor = PRIMARY_COLOR;
+
+                barOneStyleB.backgroundColor = PRIMARY_COLOR;
+                barTwoStyleB.backgroundColor = PRIMARY_COLOR;
+
+                barOneStyleL.backgroundColor = PRIMARY_COLOR;
+                barTwoStyleL.backgroundColor = PRIMARY_COLOR;
+
+                barOneStyleR.backgroundColor = PRIMARY_COLOR;
+                barTwoStyleR.backgroundColor = PRIMARY_COLOR;
+
+
+                console.log("swap: ", swap);
+                console.log("barOneIdx: ", barOneIdx);
+                console.log("barTwoIdx: ", barTwoIdx);
+                console.log("barOneH: ", barOneH);
+                console.log("barTwoH: ", barTwoH);
+                
+                var temp = barOneH;
+
+                barOneStyle.height = `${barOneH}vh`;
+                barOneStyleB.height = `${barOneH}vh`;
+                barOneStyleL.height = `${barOneH}vh`;
+                barOneStyleR.height = `${barOneH}vh`;
+                barOneStyle.transform = `translateY(${90 - barOneH}vh)`;
+
+                barOneStyleB.transform = `translateY(${90 - barOneH}vh)`;
+                barOneStyleL.transform = `translateY(${90 - barOneH}vh)`;
+                barOneStyleR.transform = `translateY(${90 - barOneH}vh)`;
+
+                document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = barOneH;
+
+                // barTwoStyle = arrayBarsF[barTwoIdx].style;
+                // barTwoStyleB = arrayBarsB[barTwoIdx].style;
+                // barTwoStyleL = arrayBarsL[barTwoIdx].style;
+                // barTwoStyleR = arrayBarsR[barTwoIdx].style;
+
+                barTwoStyle.height = `${barTwoH}vh`;
+                barTwoStyleB.height = `${barTwoH}vh`;
+                barTwoStyleL.height = `${barTwoH}vh`;
+                barTwoStyleR.height = `${barTwoH}vh`;
+                barTwoStyle.transform = `translateY(${90 - barTwoH}vh)`;
+                barTwoStyleB.transform = `translateY(${90 - barTwoH}vh)`;
+                barTwoStyleL.transform = `translateY(${90 - barTwoH}vh)`;
+                barTwoStyleR.transform = `translateY(${90 - barTwoH}vh)`;
+
+                console.log("bar hegihts", barOneH, barTwoH, barTwoH);
+
+                document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = barTwoH;
+                
+                
+            }
+            }, i * ANIMATION_SPEED_MS);
+            
+            document.getElementsByClassName('color').backgroundColor = PRIMARY_COLOR;
+        }
+
+        setArray(array.sort(function(a, b){return a-b}));
+
+        
+
+        
 
         
     }
@@ -249,33 +368,6 @@ function Sortingvisualizer() {
                     }
 
                 
-
-    
-                //   barOneStyle.height = `${b1height}vh`;
-                //     barOneStyleB.height = `${b1height}vh`;
-                //     barOneStyleL.height = `${b1height}vh`;
-                //     barOneStyleR.height = `${b1height}vh`;
-                //   barOneStyle.transform = `translateY(${90 - b1height}vh)`;
-                //     barOneStyleB.transform = `translateY(${90 - b1height}vh)`;
-                //     barOneStyleL.transform = `translateY(${90 - b1height}vh)`;
-                //     barOneStyleR.transform = `translateY(${90 - b1height}vh)`;
-
-
-                    // const barTwoStyle = arrayBarsF[barTwoIdx].style;
-                    // const barTwoStyleB = arrayBarsB[barTwoIdx].style;
-                    // const barTwoStyleL = arrayBarsL[barTwoIdx].style;
-                    // const barTwoStyleR = arrayBarsR[barTwoIdx].style;
-                    // document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = b1height;
-                    // document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = b2height;
-
-                    // barTwoStyle.height = `${b2height}vh`;
-                    // barTwoStyleB.height = `${b2height}vh`;
-                    // barTwoStyleL.height = `${b2height}vh`;
-                    // barTwoStyleR.height = `${b2height}vh`;
-                    // barTwoStyle.transform = `translateY(${90 - b2height}vh)`;
-                    // barTwoStyleB.transform = `translateY(${90 - b2height}vh)`;
-                    // barTwoStyleL.transform = `translateY(${90 - b2height}vh)`;
-                    // barTwoStyleR.transform = `translateY(${90 - b2height}vh)`;
                     
     
 
@@ -289,6 +381,9 @@ function Sortingvisualizer() {
                 
               }
             }
+
+            setArray(array.sort(function(a, b){return a-b}));
+
         }
 
 
@@ -317,6 +412,7 @@ function Sortingvisualizer() {
     <div className="buttonBox">
         <button className="button" onClick={bubbleSort}>Bubble Sort Array</button>
         <button className="button" onClick={mergeSort}>Merge Sort Array</button>
+        <button className="button" onClick={insertionSort}>Insertion Sort Array</button>
 
         <button className="button" onClick={createArray}>Generate Array</button>
 
