@@ -1,5 +1,8 @@
 // export function mergeSort(arr, l, r) {
 //     if (l >= r) return arr;
+
+import { resetColors } from "./generalAlgorithms";
+
   
 //     const m = l + Math.floor((r - l) / 2);
 //     mergeSort(arr, l, m);
@@ -60,6 +63,54 @@ export function getMergeSortAnimations(array) {
   const auxiliaryArray = array.slice();
   mergeSortHelper(array, 0, array.length - 1, auxiliaryArray, animations);
   return animations;
+}
+
+export function getSelectionSortAnimations(array){
+  const animations = [];
+  const auxiliaryArray = array.slice();
+
+  if (array.length <= 1) return array;
+
+  for (let i = 0; i < auxiliaryArray.length - 1; i++) {
+    let min_idx = i;
+
+
+
+
+    for (let j = i+1; j < auxiliaryArray.length; j++) {
+      // push indices of the elements being compared
+      
+
+      if (auxiliaryArray[j] < auxiliaryArray[min_idx]) {
+        min_idx = j;
+      }
+
+    }
+
+    for (let k=i; k <= min_idx; k++) {
+      // push indices of the elements being compared
+      animations.push([i, k]);
+
+    }
+
+
+    
+    // push indices of the elements being compared
+    
+    // push indices and values of the elements being swapped
+    console.log("aux array", i, min_idx, auxiliaryArray[i], auxiliaryArray[min_idx], auxiliaryArray);
+
+    animations.push([i, min_idx, auxiliaryArray[i] ,auxiliaryArray[min_idx], false]);
+    animations.push([i, min_idx, auxiliaryArray[i] ,auxiliaryArray[min_idx], true]);
+    let temp = auxiliaryArray[min_idx];
+    auxiliaryArray[min_idx] = auxiliaryArray[i];
+    auxiliaryArray[i] = temp;
+    
+
+  }
+
+  return animations;
+  
 }
 
 export function getInsertionSortAnimations(array) {

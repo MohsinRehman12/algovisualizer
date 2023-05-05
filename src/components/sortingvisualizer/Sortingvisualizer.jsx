@@ -131,14 +131,14 @@ function Sortingvisualizer() {
         
     }
 
-
-    function insertionSort(){
-
+    function selectionSort(){
       generalAlgorithms.resetColors();
-        const animations = sortingAlgorithms.getInsertionSortAnimations(array);
+        const animations = sortingAlgorithms.getSelectionSortAnimations(array);
         console.log("animationsI: ", animations);
 
         for (let i = 0; i < animations.length; i++) {
+
+
 
             
             
@@ -183,8 +183,88 @@ function Sortingvisualizer() {
 
             if(swap){
 
-              generalAlgorithms.styleSwap( animations[i], PRIMARY_COLOR);
+              var animationsIndexSwap = [barTwoIdx, barOneIdx, barOneH, barTwoH, swap];
+
+              generalAlgorithms.styleSwap( animationsIndexSwap, PRIMARY_COLOR);
+
+              generalAlgorithms.resetColors();
                 
+            }
+            }, i * ANIMATION_SPEED_MS);
+            
+            document.getElementsByClassName('color').backgroundColor = PRIMARY_COLOR;
+        }
+
+        // generalAlgorithms.finishedSort();
+
+        setArray(array.sort(function(a, b){return a-b}));
+
+    }
+
+
+    function insertionSort(){
+
+      generalAlgorithms.resetColors();
+        const animations = sortingAlgorithms.getInsertionSortAnimations(array);
+        console.log("animationsI: ", animations);
+
+        for (let i = 0; i < animations.length; i++) {
+
+
+            
+            const [barOneIdx, barTwoIdx, barOneH, barTwoH, swap] = animations[i];
+            
+            setTimeout(() => {
+
+
+
+                var arrayBarsF = document.getElementsByClassName('bar front color');
+                var arrayBarsB = document.getElementsByClassName('bar back color');
+                var arrayBarsL = document.getElementsByClassName('bar left color');
+                var arrayBarsR = document.getElementsByClassName('bar right color');
+
+                var arrayBarsValue = document.getElementsByClassName('bar value');
+
+                var barOneStyle = arrayBarsF[barOneIdx].style;
+                var barTwoStyle = arrayBarsF[barTwoIdx].style;
+
+                var barOneStyleB = arrayBarsB[barOneIdx].style;
+                var barTwoStyleB = arrayBarsB[barTwoIdx].style;
+
+                var barOneStyleL = arrayBarsL[barOneIdx].style;
+                var barTwoStyleL = arrayBarsL[barTwoIdx].style;
+
+                var barOneStyleR = arrayBarsR[barOneIdx].style;
+                var barTwoStyleR = arrayBarsR[barTwoIdx].style;
+
+                
+                  barOneStyle.backgroundColor = SECONDARY_COLOR;
+                  barOneStyleB.backgroundColor = SECONDARY_COLOR;
+                  barOneStyleL.backgroundColor = SECONDARY_COLOR;
+                  barOneStyleR.backgroundColor = SECONDARY_COLOR;
+
+                
+
+                barTwoStyle.backgroundColor = SECONDARY_COLOR;
+
+                barTwoStyleB.backgroundColor = SECONDARY_COLOR;
+
+                barTwoStyleL.backgroundColor = SECONDARY_COLOR;
+
+                barTwoStyleR.backgroundColor = SECONDARY_COLOR;
+
+
+                
+            
+
+            if(swap){
+
+
+              generalAlgorithms.styleSwap( animations[i], PRIMARY_COLOR);
+              generalAlgorithms.resetColors();
+
+                
+
             }
             }, i * ANIMATION_SPEED_MS);
             
@@ -317,6 +397,7 @@ function Sortingvisualizer() {
         <button className="button" onClick={bubbleSort}>Bubble Sort Array</button>
         <button className="button" onClick={mergeSort}>Merge Sort Array</button>
         <button className="button" onClick={insertionSort}>Insertion Sort Array</button>
+        <button className="button" onClick={selectionSort}>Selection Sort Array</button>
 
         <button className="button" onClick={createArray}>Generate Array</button>
 
