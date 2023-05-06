@@ -108,6 +108,11 @@ export function finishedSort(){
         arrayBarsB[i].style.backgroundColor = 'green';
         arrayBarsL[i].style.backgroundColor = 'green';
         arrayBarsR[i].style.backgroundColor = 'green';
+        arrayBarsF[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
+        arrayBarsB[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
+        arrayBarsL[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
+        arrayBarsR[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
+
     }
 
 }

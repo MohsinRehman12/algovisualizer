@@ -77,6 +77,7 @@ export function getSelectionSortAnimations(array){
 
 
 
+
     for (let j = i+1; j < auxiliaryArray.length; j++) {
       // push indices of the elements being compared
       
@@ -90,6 +91,7 @@ export function getSelectionSortAnimations(array){
     for (let k=i; k <= min_idx; k++) {
       // push indices of the elements being compared
       animations.push([i, k]);
+
 
     }
 
@@ -111,6 +113,62 @@ export function getSelectionSortAnimations(array){
 
   return animations;
   
+}
+
+export function getQuickSortAnimations(array){
+
+  const animations = [];
+  const auxiliaryArray = array.slice();
+
+  if (array.length <= 1) return array;
+
+  quickSortHelper(auxiliaryArray, 0, auxiliaryArray.length - 1, animations);
+
+
+  console.log("aux array", auxiliaryArray);
+  return animations;
+
+
+}
+
+export function quickSortHelper(array, low, high, animations) {
+  if (low < high) {
+    let pi = partition(array, low, high, animations);
+    quickSortHelper(array, low, pi - 1, animations);
+    quickSortHelper(array, pi + 1, high, animations);
+  }
+}
+
+
+export function partition(array, low, high, animations){
+
+  let pivot = array[high];
+
+  let i = (low - 1);
+
+  for (let j = low; j <= high - 1; j++) {
+
+    animations.push([high, false]);
+
+    
+  
+
+    if (array[j] < pivot) {
+      i++;
+      [array[i], array[j]] = [array[j], array[i]];
+      animations.push([i, j, array[i] ,array[j], false]);
+      animations.push([i, j, array[i] ,array[j], true]);
+    }
+  }
+
+  [array[i+1], array[high]] = [array[high], array[i+1]];
+
+  animations.push([(i+1), high, array[i+1] ,array[high], false]);
+  animations.push([(i+1), high, array[i+1] ,array[high], true]);
+
+  console.log("arrayP", array);
+  return (i + 1);
+
 }
 
 export function getInsertionSortAnimations(array) {
