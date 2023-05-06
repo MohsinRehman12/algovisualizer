@@ -482,6 +482,96 @@ function Sortingvisualizer() {
         }
 
 
+    function cocktailShakerSort(){
+        const animations = sortingAlgorithms.getCocktailShakerSortAnimations(array);
+        console.log("animationsC: ", animations);
+        for (let i = 0; i < animations.length; i++) {
+          const arrayBarsF = document.getElementsByClassName('bar front color');
+          const arrayBarsB = document.getElementsByClassName('bar back color');
+          const arrayBarsL = document.getElementsByClassName('bar left color');
+          const arrayBarsR = document.getElementsByClassName('bar right color');
+
+
+
+          const isColorChange = i % 3 !== 2;
+          if (isColorChange) {
+              const [barOneIdx, barTwoIdx] = animations[i];
+              console.log("barOneIdx: ", barOneIdx);
+                  console.log("barTwoIdx: ", barTwoIdx);
+              const barOneStyle = arrayBarsF[barOneIdx].style;
+              const barTwoStyle = arrayBarsF[barTwoIdx].style;
+  
+              const barOneStyleB = arrayBarsB[barOneIdx].style;
+              const barTwoStyleB = arrayBarsB[barTwoIdx].style;
+  
+              const barOneStyleL = arrayBarsL[barOneIdx].style;
+              const barTwoStyleL = arrayBarsL[barTwoIdx].style;
+  
+              const barOneStyleR = arrayBarsR[barOneIdx].style;
+              const barTwoStyleR = arrayBarsR[barTwoIdx].style;
+  
+  
+  
+              const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+              setTimeout(() => {
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
+                  barOneStyleB.backgroundColor = color;
+                  barTwoStyleB.backgroundColor = color;
+  
+                  barOneStyleL.backgroundColor = color;
+                  barTwoStyleL.backgroundColor = color;
+  
+                  barOneStyleR.backgroundColor = color;
+                  barTwoStyleR.backgroundColor = color;
+  
+  
+  
+              }, i * ANIMATION_SPEED_MS);
+            } else {
+              setTimeout(() => {
+                const [barOneIdx, barTwoIdx, b1height, b2height] = animations[i];
+
+
+                if(b1height > b2height){
+
+                  const animationsIndexSwap = [barTwoIdx, barOneIdx, b1height, b2height];
+                  
+
+                  generalAlgorithms.styleSwap( animationsIndexSwap, PRIMARY_COLOR);
+
+
+                  }
+                  else{
+                    generalAlgorithms.styleSwap( animations[i], PRIMARY_COLOR);
+
+                  }
+
+              
+                  
+  
+
+  
+  
+  
+  
+                  if(i == animations.length - 1){
+                    generalAlgorithms.finishedSort();
+                  }
+              }
+              
+              , i * ANIMATION_SPEED_MS);
+              
+            }
+            
+          }
+
+          setArray(array.sort(function(a, b){return a-b}));
+          // generalAlgorithms.finishedSort();
+
+      
+    }    
+
 
     function arraysAreEqual(arrayOne, arrayTwo){
         if(arrayOne.length !== arrayTwo.length) return false;
@@ -510,6 +600,7 @@ function Sortingvisualizer() {
         <button className="button" onClick={insertionSort}>Insertion Sort Array</button>
         <button className="button" onClick={selectionSort}>Selection Sort Array</button>
         <button className="button" onClick={quickSort}>Quick Sort Array</button>
+        <button className="button" onClick={cocktailShakerSort}>Cocktail Shaker Sort Array</button>
 
         <button className="button" onClick={createArray}>Generate Array</button>
 

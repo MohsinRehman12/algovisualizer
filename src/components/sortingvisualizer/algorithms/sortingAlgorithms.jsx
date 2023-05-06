@@ -306,4 +306,60 @@ function doMerge(
     animations.push([k, auxiliaryArray[j]]);
     mainArray[k++] = auxiliaryArray[j++];
   }
+
+}
+
+export function getCocktailShakerSortAnimations(array){
+  let animations = [];
+  let n = array.length;
+  let swapped = true;
+  let start = 0;
+  let end = n - 1;
+
+  while(swapped){
+    swapped = false;
+
+    for(let i = start; i < end; i++){
+
+      animations.push([i, i+1]);
+      animations.push([i, i+1]);
+
+      if(array[i] > array[i+1]){
+        animations.push([i, i+1, array[i], array[i+1]]);
+        [array[i], array[i+1]] = [array[i+1], array[i]];
+        swapped = true;
+      }
+      else{
+        animations.push([i, i+1, array[i], array[i+1]]);
+      }
+    }
+
+    if(!swapped){
+
+      break;
+    }
+
+    swapped = false;
+
+    end = end - 1;
+
+    for(let i = end - 1; i >= start; i--){
+      animations.push([i, i+1]);
+      animations.push([i, i+1]);
+
+      if(array[i] > array[i+1]){
+        animations.push([i, i+1, array[i], array[i+1]]);
+        [array[i], array[i+1]] = [array[i+1], array[i]];
+        swapped = true;
+      }
+      else{
+        animations.push([i, i+1, array[i], array[i+1]]);
+      }
+    }
+
+    start = start + 1;
+  }
+
+  return animations;
+
 }
