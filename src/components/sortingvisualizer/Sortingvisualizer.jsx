@@ -4,13 +4,36 @@ import { useState, useEffect } from 'react';
 import Bar from './Bar';
 import * as sortingAlgorithms from './algorithms/sortingAlgorithms';
 import * as generalAlgorithms from './algorithms/generalAlgorithms';
-
+import { Slider } from '@mui/material';
 
 function Sortingvisualizer() {
 
     const [array, setArray] = useState([]);
-    const [sorted, setSorted] = useState(false);
-    const ANIMATION_SPEED_MS = 200;
+    const [arraySize, setArraySize] = useState(10);
+    const [isSorting, setIsSorting] = useState(false);
+    const [showSliders, setShowSliders] = useState(false);
+
+    useEffect(() => {
+      console.log("arrayF: ", array);
+
+        if(isSorting==1){
+            generalAlgorithms.resetColors();
+            generalAlgorithms.disableButtons(isSorting);
+            setShowSliders(true);
+
+        }
+        
+        else{
+            generalAlgorithms.enableButtons(isSorting);
+            setShowSliders(false);
+            setArray(array.sort(function(a, b){return a-b}));
+
+
+        }
+
+    }, [isSorting])
+
+    const [ANIMATION_SPEED_MS, setAnimationSpeed] = useState(200);
 
     // Change this value for the number of bars (value) in the array.
     const NUMBER_OF_ARRAY_BARS = 310;
@@ -38,19 +61,24 @@ function Sortingvisualizer() {
 
     function createArray(){
         const array = [];
-        for(let i = 0; i < 12; i++){
+        for(let i = 0; i < arraySize; i++){
             array.push(getRandomIntRange(5, 90));
         }
         setArray(array);
-        console.log("array: ", array);
         generalAlgorithms.resetColors();
 
     }
 
+    
+
     function mergeSort(){
 
+      generalAlgorithms.disableButtons(isSorting);
+      
+      setIsSorting(1);
+
+
         const animations = sortingAlgorithms.getMergeSortAnimations(array);
-        console.log("animations: ", animations);
 
         for (let i = 0; i < animations.length; i++) {
           const arrayBarsF = document.getElementsByClassName('bar front color');
@@ -65,8 +93,6 @@ function Sortingvisualizer() {
           const isColorChange = i % 3 !== 2;
           if (isColorChange) {
             const [barOneIdx, barTwoIdx] = animations[i];
-            console.log("barOneIdx: ", barOneIdx);
-                console.log("barTwoIdx: ", barTwoIdx);
             const barOneStyle = arrayBarsF[barOneIdx].style;
             const barTwoStyle = arrayBarsF[barTwoIdx].style;
 
@@ -117,16 +143,17 @@ function Sortingvisualizer() {
 
                 document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = newHeight;
 
-
-            if(i == animations.length - 1){
-              generalAlgorithms.finishedSort();
-            }
+                if(i == animations.length - 1){
+                  generalAlgorithms.finishedSort();
+                  setIsSorting(0);
+    
+                }
 
 
             }, i * ANIMATION_SPEED_MS);
           }
         }
-        setArray(array.sort(function(a, b){return a-b}));
+
 
 
 
@@ -134,6 +161,10 @@ function Sortingvisualizer() {
     }
 
     function selectionSort(){
+
+      generalAlgorithms.disableButtons(isSorting);
+      setIsSorting(1);
+
       generalAlgorithms.resetColors();
         const animations = sortingAlgorithms.getSelectionSortAnimations(array);
 
@@ -194,6 +225,8 @@ function Sortingvisualizer() {
 
             if(i == animations.length - 1){
               generalAlgorithms.finishedSort();
+              setIsSorting(0);
+
             }
 
             }, i * ANIMATION_SPEED_MS);
@@ -205,17 +238,18 @@ function Sortingvisualizer() {
         
 
         // generalAlgorithms.finishedSort();
-
-        setArray(array.sort(function(a, b){return a-b}));
+        
 
     }
 
 
     function insertionSort(){
+      generalAlgorithms.disableButtons(isSorting);
+      setIsSorting(1);
+
 
       generalAlgorithms.resetColors();
         const animations = sortingAlgorithms.getInsertionSortAnimations(array);
-        console.log("animationsI: ", animations);
 
         for (let i = 0; i < animations.length; i++) {
 
@@ -277,6 +311,8 @@ function Sortingvisualizer() {
             }
             if(i == animations.length - 1){
               generalAlgorithms.finishedSort();
+              setIsSorting(0);
+
             }
             }, i * ANIMATION_SPEED_MS);
             
@@ -285,7 +321,6 @@ function Sortingvisualizer() {
 
         // generalAlgorithms.finishedSort();
 
-        setArray(array.sort(function(a, b){return a-b}));
 
         
 
@@ -295,9 +330,12 @@ function Sortingvisualizer() {
     }
 
     function quickSort(){
+      generalAlgorithms.disableButtons(isSorting);
+      setIsSorting(1);
+
+
         generalAlgorithms.resetColors();
         const animations = sortingAlgorithms.getQuickSortAnimations(array);
-        console.log("animationsI: ", animations);
 
         for (let i = 0; i < animations.length; i++) {
 
@@ -375,6 +413,8 @@ function Sortingvisualizer() {
             }
             if(i == animations.length - 1){
               generalAlgorithms.finishedSort();
+              setIsSorting(0);
+
             }
             
             }, i * ANIMATION_SPEED_MS);
@@ -384,15 +424,18 @@ function Sortingvisualizer() {
 
         // generalAlgorithms.finishedSort();
 
-        setArray(array.sort(function(a, b){return a-b}));
 
     
 
     }
 
     function bubbleSort(){
+      setIsSorting(1);
+
+      generalAlgorithms.disableButtons(isSorting);
+
+
         const animations = sortingAlgorithms.getBubbleSortAnimations(array);
-        console.log("animationsB: ", animations);
 
         for (let i = 0; i < animations.length; i++) {
             const arrayBarsF = document.getElementsByClassName('bar front color');
@@ -405,8 +448,6 @@ function Sortingvisualizer() {
             const isColorChange = i % 3 !== 2;
             if (isColorChange) {
                 const [barOneIdx, barTwoIdx] = animations[i];
-                console.log("barOneIdx: ", barOneIdx);
-                    console.log("barTwoIdx: ", barTwoIdx);
                 const barOneStyle = arrayBarsF[barOneIdx].style;
                 const barTwoStyle = arrayBarsF[barTwoIdx].style;
     
@@ -466,6 +507,9 @@ function Sortingvisualizer() {
     
                     if(i == animations.length - 1){
                       generalAlgorithms.finishedSort();
+                      setIsSorting(0);
+
+
                     }
                 }
                 
@@ -475,7 +519,6 @@ function Sortingvisualizer() {
               
             }
 
-            setArray(array.sort(function(a, b){return a-b}));
             // generalAlgorithms.finishedSort();
 
 
@@ -483,8 +526,11 @@ function Sortingvisualizer() {
 
 
     function cocktailShakerSort(){
+      
+      setIsSorting(1);
+      generalAlgorithms.disableButtons(isSorting);
+
         const animations = sortingAlgorithms.getCocktailShakerSortAnimations(array);
-        console.log("animationsC: ", animations);
         for (let i = 0; i < animations.length; i++) {
           const arrayBarsF = document.getElementsByClassName('bar front color');
           const arrayBarsB = document.getElementsByClassName('bar back color');
@@ -496,8 +542,6 @@ function Sortingvisualizer() {
           const isColorChange = i % 3 !== 2;
           if (isColorChange) {
               const [barOneIdx, barTwoIdx] = animations[i];
-              console.log("barOneIdx: ", barOneIdx);
-                  console.log("barTwoIdx: ", barTwoIdx);
               const barOneStyle = arrayBarsF[barOneIdx].style;
               const barTwoStyle = arrayBarsF[barTwoIdx].style;
   
@@ -557,6 +601,8 @@ function Sortingvisualizer() {
   
                   if(i == animations.length - 1){
                     generalAlgorithms.finishedSort();
+                    setIsSorting(0);
+      
                   }
               }
               
@@ -566,43 +612,44 @@ function Sortingvisualizer() {
             
           }
 
-          setArray(array.sort(function(a, b){return a-b}));
+          
           // generalAlgorithms.finishedSort();
 
       
     }    
 
-
-    function arraysAreEqual(arrayOne, arrayTwo){
-        if(arrayOne.length !== arrayTwo.length) return false;
-        for(let i = 0; i < arrayOne.length; i++){
-            if(arrayOne[i] !== arrayTwo[i]) return false;
-        }
-        return true;
+    function handleSliderChange(e){
+        setArraySize(e.target.value);
+        createArray();
     }
 
-    // useEffect(() => {
-    //     if(sorted){
-    //         var elements = document.getElementsByClassName('bar color');
-    //         for(var i = 0; i < elements.length; i++){
-    //             elements[i].style.backgroundColor = 'green';
-    //         }
-    //     }
-    // }, [sorted])
+    function handleSliderChangeTime(e){
+      setAnimationSpeed(e.target.value);
+      createArray();
+  }
+
+  
+
+
+ 
 
 
   return (
     <>
 
-    <div className="buttonBox">
-        <button className="button" onClick={bubbleSort}>Bubble Sort Array</button>
-        <button className="button" onClick={mergeSort}>Merge Sort Array</button>
-        <button className="button" onClick={insertionSort}>Insertion Sort Array</button>
-        <button className="button" onClick={selectionSort}>Selection Sort Array</button>
-        <button className="button" onClick={quickSort}>Quick Sort Array</button>
-        <button className="button" onClick={cocktailShakerSort}>Cocktail Shaker Sort Array</button>
+    <div className="header">
+      <h1 className='headerText'>Sorting Visualizer</h1>
+    </div>
 
-        <button className="button" onClick={createArray}>Generate Array</button>
+    <div className="buttonBox">
+        <button className="bar-button" id='sortbutton1' onClick={bubbleSort}> Bubble Sort Array</button>
+        <button className="bar-button" id='sortbutton2' onClick={mergeSort}>Merge Sort Array</button>
+        <button className="bar-button" id='sortbutton3'  onClick={insertionSort}>Insertion Sort Array</button>
+        <button className="bar-button" id='sortbutton4'  onClick={selectionSort}>Selection Sort Array</button>
+        <button className="bar-button" id='sortbutton5'  onClick={quickSort}>Quick Sort Array</button>
+        <button className="bar-button" id='sortbutton6'  onClick={cocktailShakerSort}>Cocktail Shaker Sort Array</button>
+
+        <button className="bar-button" id='sortbutton7' disabled={isSorting} onClick={createArray}>Generate Array</button>
 
     </div>
 
@@ -611,13 +658,17 @@ function Sortingvisualizer() {
             <div height={value} key={idx} className="bar-container"> 
 
                 <div className="bar top">
+
+                
                     </div>
 
                     <div className="bar bottom">
 
                     </div>
 
-                    <div className="bar front">
+                    
+
+                    <div className="bar front" >
                         <div className="bar front color" style={{ height: `${value}vh`, transform: `translateY(${90-value}vh)` }}>
                         <p className='barvalue'>{value}</p>
 
@@ -637,7 +688,7 @@ function Sortingvisualizer() {
                         </div>
                     </div>
 
-                    <div className="bar right">
+                    <div className="bar right" style={{padding: '0px', margin: '0px'}}>
                         <div className="bar right color" style={{ height: `${value}vh`, transform: `translateY(${90-value}vh)` }}>
 
                         </div>  
@@ -645,6 +696,40 @@ function Sortingvisualizer() {
             </div>
     ))}
 
+    </div>
+    <div className="sliderBox">
+    <h3 className="sliderHeaders"> Size Of Array</h3>
+    <Slider
+        defaultValue={10}
+        aria-labelledby="discrete-slider"
+        aria-label='sliders'
+        valueLabelDisplay="auto"
+        step={1}
+        marks
+        min={5}
+        max={20}
+        onChange={handleSliderChange}
+        className='sort-sliders'
+        disabled={showSliders}
+        id='sortbutton8' 
+        ></Slider>
+
+<h3 className="sliderHeaders"> Animation Speed</h3>
+
+    <Slider
+        defaultValue={200}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        step={50}
+        marks
+        min={50}
+        max={400}
+        onChange={handleSliderChangeTime}
+        id='sortbutton9'
+        disabled={showSliders}
+        className='sort-sliders'
+
+        ></Slider>
     </div>
 
     </>

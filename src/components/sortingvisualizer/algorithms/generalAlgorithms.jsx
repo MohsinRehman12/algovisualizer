@@ -35,11 +35,7 @@ export function styleSwap( animationsIndex, PRIMARY_COLOR){
                 barTwoStyleR.backgroundColor = PRIMARY_COLOR;
 
 
-                console.log("swap: ", swap);
-                console.log("barOneIdx: ", barOneIdx);
-                console.log("barTwoIdx: ", barTwoIdx);
-                console.log("barOneH: ", barOneH);
-                console.log("barTwoH: ", barTwoH);
+                
                 
 
                 barOneStyle.height = `${barOneH}vh`;
@@ -68,7 +64,6 @@ export function styleSwap( animationsIndex, PRIMARY_COLOR){
                 barTwoStyleL.transform = `translateY(${90 - barTwoH}vh)`;
                 barTwoStyleR.transform = `translateY(${90 - barTwoH}vh)`;
 
-                console.log("bar hegihts", barOneH, barTwoH, barTwoH);
 
                 document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = barTwoH;
                 
@@ -90,11 +85,15 @@ export function resetColors(){
             
             arrayBarsL[i].style.backgroundColor = 'red';
             arrayBarsR[i].style.backgroundColor = 'red';
-
+            arrayBarsF[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
+            arrayBarsB[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
+            arrayBarsL[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
+            arrayBarsR[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
 
         }
     
 }
+
 
 export function finishedSort(){
 
@@ -115,4 +114,28 @@ export function finishedSort(){
 
     }
 
+}
+
+export function disableButtons(isSorting){
+    document.getElementById('sortbutton1').setAttribute('disabled', 'disabled');
+    document.getElementById('sortbutton2').setAttribute('disabled', 'disabled');
+    document.getElementById('sortbutton3').setAttribute('disabled', 'disabled');
+    document.getElementById('sortbutton4').setAttribute('disabled', 'disabled');
+    document.getElementById('sortbutton5').setAttribute('disabled', 'disabled');
+    document.getElementById('sortbutton6').setAttribute('disabled', 'disabled');
+    document.getElementById('sortbutton7').setAttribute('disabled', 'disabled');
+}
+
+export function enableButtons(isSorting){
+
+    document.getElementById('sortbutton1').removeAttribute('disabled');
+    document.getElementById('sortbutton2').removeAttribute('disabled');
+    document.getElementById('sortbutton3').removeAttribute('disabled');
+    document.getElementById('sortbutton4').removeAttribute('disabled');
+    document.getElementById('sortbutton5').removeAttribute('disabled');
+    document.getElementById('sortbutton6').removeAttribute('disabled');
+    document.getElementById('sortbutton7').removeAttribute('disabled');
+    document.getElementById('sortbutton8').classList.replace( 'sort-sliders.Mui-disabled' ,'sort-sliders');
+
+    isSorting = false;
 }
