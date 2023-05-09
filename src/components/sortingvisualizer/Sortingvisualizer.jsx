@@ -36,7 +36,6 @@ function Sortingvisualizer() {
     const [ANIMATION_SPEED_MS, setAnimationSpeed] = useState(200);
 
     // Change this value for the number of bars (value) in the array.
-    const NUMBER_OF_ARRAY_BARS = 310;
     
     // This is the main color of the array bars.
     const PRIMARY_COLOR = 'red';
@@ -132,14 +131,14 @@ function Sortingvisualizer() {
               const barOneStyleR = arrayBarsR[barOneIdx].style;
 
 
-              barOneStyle.height = `${newHeight}vh`;
-                barOneStyleB.height = `${newHeight}vh`;
-                barOneStyleL.height = `${newHeight}vh`;
-                barOneStyleR.height = `${newHeight}vh`;
-              barOneStyle.transform = `translateY(${90 - newHeight}vh)`;
-                barOneStyleB.transform = `translateY(${90 - newHeight}vh)`;
-                barOneStyleL.transform = `translateY(${90 - newHeight}vh)`;
-                barOneStyleR.transform = `translateY(${90 - newHeight}vh)`;
+              barOneStyle.height = `${(newHeight/2)}vh`;
+                barOneStyleB.height = `${(newHeight/2)}vh`;
+                barOneStyleL.height = `${(newHeight/2)}vh`;
+                barOneStyleR.height = `${(newHeight/2)}vh`;
+              barOneStyle.transform = `translateY(${45-(newHeight/2)}vh)`;
+                barOneStyleB.transform = `translateY(${45-(newHeight/2)}vh)`;
+                barOneStyleL.transform = `translateY(${45-(newHeight/2)}vh)`;
+                barOneStyleR.transform = `translateY(${45-(newHeight/2)}vh)`;
 
                 document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = newHeight;
 
@@ -642,12 +641,12 @@ function Sortingvisualizer() {
     </div>
 
     <div className="buttonBox">
-        <button className="bar-button" id='sortbutton1' onClick={bubbleSort}> Bubble Sort Array</button>
-        <button className="bar-button" id='sortbutton2' onClick={mergeSort}>Merge Sort Array</button>
-        <button className="bar-button" id='sortbutton3'  onClick={insertionSort}>Insertion Sort Array</button>
-        <button className="bar-button" id='sortbutton4'  onClick={selectionSort}>Selection Sort Array</button>
-        <button className="bar-button" id='sortbutton5'  onClick={quickSort}>Quick Sort Array</button>
-        <button className="bar-button" id='sortbutton6'  onClick={cocktailShakerSort}>Cocktail Shaker Sort Array</button>
+        <button className="bar-button" id='sortbutton1' onClick={bubbleSort}> Bubble Sort</button>
+        <button className="bar-button" id='sortbutton2' onClick={mergeSort}>Merge Sort</button>
+        <button className="bar-button" id='sortbutton3'  onClick={insertionSort}>Insertion Sort</button>
+        <button className="bar-button" id='sortbutton4'  onClick={selectionSort}>Selection Sort</button>
+        <button className="bar-button" id='sortbutton5'  onClick={quickSort}>Quick Sort</button>
+        <button className="bar-button" id='sortbutton6'  onClick={cocktailShakerSort}>Cocktail Shaker Sort</button>
 
         <button className="bar-button" id='sortbutton7' disabled={isSorting} onClick={createArray}>Generate Array</button>
 
@@ -669,7 +668,7 @@ function Sortingvisualizer() {
                     
 
                     <div className="bar front" >
-                        <div className="bar front color" style={{ height: `${value}vh`, transform: `translateY(${90-value}vh)` }}>
+                        <div className="bar front color" style={{ height: `${(value/2)}vh`, transform: `translateY(${45-(value/2)}vh)` }}>
                         <p className='barvalue'>{value}</p>
 
                         </div>
@@ -677,19 +676,19 @@ function Sortingvisualizer() {
                     </div>
 
                     <div className="bar back" >
-                        <div className="bar back color" style={{ height: `${value}vh`, transform: `translateY(${90-value}vh)` }}>
+                        <div className="bar back color" style={{ height: `${value/2}vh`, transform: `translateY(${45-(value/2)}vh)` }}>
 
                         </div>
                     </div>
 
                     <div className="bar left">
-                        <div className="bar left color" style={{ height: `${value}vh`, transform: `translateY(${90-value}vh)` }}>
+                        <div className="bar left color" style={{ height: `${value/2}vh`, transform: `translateY(${45-(value/2)}vh)` }}>
 
                         </div>
                     </div>
 
                     <div className="bar right" style={{padding: '0px', margin: '0px'}}>
-                        <div className="bar right color" style={{ height: `${value}vh`, transform: `translateY(${90-value}vh)` }}>
+                        <div className="bar right color" style={{ height: `${value/2}vh`, transform: `translateY(${45-(value/2)}vh)` }}>
 
                         </div>  
                     </div>

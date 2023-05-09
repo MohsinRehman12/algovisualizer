@@ -38,15 +38,15 @@ export function styleSwap( animationsIndex, PRIMARY_COLOR){
                 
                 
 
-                barOneStyle.height = `${barOneH}vh`;
-                barOneStyleB.height = `${barOneH}vh`;
-                barOneStyleL.height = `${barOneH}vh`;
-                barOneStyleR.height = `${barOneH}vh`;
-                barOneStyle.transform = `translateY(${90 - barOneH}vh)`;
+                barOneStyle.height = `${(barOneH/2)}vh`;
+                barOneStyleB.height = `${(barOneH/2)}vh`;
+                barOneStyleL.height = `${(barOneH/2)}vh`;
+                barOneStyleR.height = `${(barOneH/2)}vh`;
+                barOneStyle.transform = `translateY(${45-(barOneH/2)}vh)`;
 
-                barOneStyleB.transform = `translateY(${90 - barOneH}vh)`;
-                barOneStyleL.transform = `translateY(${90 - barOneH}vh)`;
-                barOneStyleR.transform = `translateY(${90 - barOneH}vh)`;
+                barOneStyleB.transform = `translateY(${45-(barOneH/2)}vh)`;
+                barOneStyleL.transform = `translateY(${45-(barOneH/2)}vh)`;
+                barOneStyleR.transform = `translateY(${45-(barOneH/2)}vh)`;
 
                 document.getElementsByClassName('barvalue')[barOneIdx].innerHTML = barOneH;
 
@@ -55,14 +55,14 @@ export function styleSwap( animationsIndex, PRIMARY_COLOR){
                 // barTwoStyleL = arrayBarsL[barTwoIdx].style;
                 // barTwoStyleR = arrayBarsR[barTwoIdx].style;
 
-                barTwoStyle.height = `${barTwoH}vh`;
-                barTwoStyleB.height = `${barTwoH}vh`;
-                barTwoStyleL.height = `${barTwoH}vh`;
-                barTwoStyleR.height = `${barTwoH}vh`;
-                barTwoStyle.transform = `translateY(${90 - barTwoH}vh)`;
-                barTwoStyleB.transform = `translateY(${90 - barTwoH}vh)`;
-                barTwoStyleL.transform = `translateY(${90 - barTwoH}vh)`;
-                barTwoStyleR.transform = `translateY(${90 - barTwoH}vh)`;
+                barTwoStyle.height = `${(barTwoH/2)}vh`;
+                barTwoStyleB.height = `${(barTwoH/2)}vh`;
+                barTwoStyleL.height = `${(barTwoH/2)}vh`;
+                barTwoStyleR.height = `${(barTwoH/2)}vh`;
+                barTwoStyle.transform = `translateY(${45-(barTwoH/2)}vh)`;
+                barTwoStyleB.transform = `translateY(${45-(barTwoH/2)}vh)`;
+                barTwoStyleL.transform = `translateY(${45-(barTwoH/2)}vh)`;
+                barTwoStyleR.transform = `translateY(${45-(barTwoH/2)}vh)`;
 
 
                 document.getElementsByClassName('barvalue')[barTwoIdx].innerHTML = barTwoH;
@@ -76,7 +76,8 @@ export function resetColors(){
         var arrayBarsB = document.getElementsByClassName('bar back color');
         var arrayBarsL = document.getElementsByClassName('bar left color');
         var arrayBarsR = document.getElementsByClassName('bar right color');
-    
+        var arrayBarsBo = document.getElementsByClassName('bar bottom');
+
         for (let i = 0; i < arrayBarsF.length; i++) {
             arrayBarsF[i].style.backgroundColor = 'red';
             // arrayBarsF[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
@@ -85,6 +86,7 @@ export function resetColors(){
             
             arrayBarsL[i].style.backgroundColor = 'red';
             arrayBarsR[i].style.backgroundColor = 'red';
+            arrayBarsBo[i].style.backgroundColor = 'red';
             arrayBarsF[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
             arrayBarsB[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
             arrayBarsL[i].style.boxShadow = '5px 5px 50px 5px rgba(255, 0, 0, 0.2)';
@@ -101,12 +103,14 @@ export function finishedSort(){
     var arrayBarsB = document.getElementsByClassName('bar back color');
     var arrayBarsL = document.getElementsByClassName('bar left color');
     var arrayBarsR = document.getElementsByClassName('bar right color');
+    var arrayBarsBo = document.getElementsByClassName('bar bottom');
 
     for (let i = 0; i < arrayBarsF.length; i++) {
         arrayBarsF[i].style.backgroundColor = 'green';
         arrayBarsB[i].style.backgroundColor = 'green';
         arrayBarsL[i].style.backgroundColor = 'green';
         arrayBarsR[i].style.backgroundColor = 'green';
+        arrayBarsBo[i].style.backgroundColor = 'green';
         arrayBarsF[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
         arrayBarsB[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
         arrayBarsL[i].style.boxShadow = '5px 5px 50px 5px rgba(0, 255, 0, 0.2)';
