@@ -6,6 +6,7 @@ import * as Djikstras from './algorithms/Djikstras'
 import * as BFS from './algorithms/BFS'
 import * as Astar from './algorithms/Astar'
 import * as GreedySearch from './algorithms/GreedySearch'
+import { Slider } from '@mui/material';
 function PathVisualizer() {
 
     const [nodes, setNodes] = useState([])
@@ -17,7 +18,7 @@ function PathVisualizer() {
     const [FINISH_NODE_ROW, setFinish] = useState(10);
     const [FINISH_NODE_COL, setFinishCol] = useState(35);
     const [isRunning, setIsRunning] = useState(false);
-    
+    const [animationSpeed, setAnimationSpeed] = useState(11);
     
 
     const createNode = (col, row) => {
@@ -129,7 +130,7 @@ function PathVisualizer() {
                     
 
                     animateShortestPath(nodesInShortestPathOrder);
-                }, 10 * i);
+                }, animationSpeed * i);
                 return;
             }
             
@@ -138,7 +139,7 @@ function PathVisualizer() {
                 document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-visited'
                 setNodes(tempBoard);
 
-            }, 10 * i);
+            }, animationSpeed * i);
         }
 
         console.log("here",nodes);
@@ -163,7 +164,7 @@ function PathVisualizer() {
 
                     animateShortestPath(nodesInShortestPathOrder);
                     
-                }, 10 * i);
+                }, animationSpeed * i);
                 console.log("here2",nodes);
                 return;
             }
@@ -173,7 +174,7 @@ function PathVisualizer() {
                 document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-visited'
                 setNodes(tempBoard);
 
-            }, 10 * i);
+            }, animationSpeed * i);
         }
 
 
@@ -187,7 +188,7 @@ function PathVisualizer() {
                 if(nodesInShortestPathOrder.length-1 === i){
                     setIsRunning(false);
                 }
-            }, 50 * i);
+            }, (animationSpeed*5 * i));
             
         }
 
@@ -202,8 +203,12 @@ function PathVisualizer() {
         const newNode = {
             ...node,
             isWall: !node.isWall,
+            distance: Infinity,
         };
         tempBoard[row][col] = newNode;
+        tempBoard[row][col].isWall = !node.isWall;
+        tempBoard[row][col].distance = Infinity;
+
         setNodes(tempBoard);
     }
 
@@ -236,6 +241,9 @@ function PathVisualizer() {
             return;
         }
         if(finishIsPressed){
+
+            if(row === START_NODE_ROW && col === START_NODE_COL) return;
+            if(nodes[row][col].isWall) return;
             moveGoal(row,col);
             return;
         }
@@ -266,7 +274,10 @@ function PathVisualizer() {
             isStart: false,
         }
         tempBoard[row][col] = newNode;
+        tempBoard[row][col].isStart = true;
         tempBoard[START_NODE_ROW][START_NODE_COL] = newOldStart;
+        tempBoard[START_NODE_ROW][START_NODE_COL].isStart = false;
+
         setStart(row);
         setStartCol(col);
         
@@ -406,20 +417,35 @@ function PathVisualizer() {
 
     }
 
+    function handleSliderChangeTime(e){
+        setAnimationSpeed(e.target.value);
+    }
 
-    
+
+    useEffect(() => {
+        
+        console.log("board",nodes)
+        
+    },[isRunning])
+
+
 
     
 
   return (
     <>
-        <button onClick={DjikstrasVisualizer} disabled={isRunning}>Djikstras</button>
-        <button onClick={BFSVisualizer} disabled={isRunning}>BFS</button>
-        <button onClick={DFSVisualizer} disabled={isRunning}>DFS</button>
-        <button onClick={AstarVisualizer}disabled={isRunning}>A*</button>
-        <button onClick={GreedyBFSVisualizer}disabled={isRunning} >GreedyBFS</button>
-        <button onClick={resetBoard} disabled={isRunning}>Reset</button>
+    <div className="header">
+      <h1 className='headerText'>Pathing Visualizer</h1>
+    </div>
+        <div className="buttonBox">
 
+        <button className="bar-button" onClick={DjikstrasVisualizer} disabled={isRunning}>Djikstras</button>
+        <button className="bar-button" onClick={BFSVisualizer} disabled={isRunning}>BFS</button>
+        <button className="bar-button" onClick={DFSVisualizer} disabled={isRunning}>DFS</button>
+        <button className="bar-button" onClick={AstarVisualizer}disabled={isRunning}>A*</button>
+        <button className="bar-button" onClick={GreedyBFSVisualizer}disabled={isRunning} >GreedyBFS</button>
+        <button className="bar-button" onClick={resetBoard} disabled={isRunning}>Reset</button>
+    </div>
     <div className="nodeContainer">
 
 
@@ -451,6 +477,25 @@ function PathVisualizer() {
     )}
 
     </div>
+
+    <h3 className="sliderHeaders"> Animation Speed</h3>
+
+    <Slider
+        defaultValue={11}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        step={5}
+        marks
+        min={1}
+        max={50}
+        onChange={handleSliderChangeTime}
+        id='sortbutton9'
+        disabled={isRunning}
+        className='sort-sliders'
+
+        ></Slider>
+
+        
 
     </>
   )

@@ -6,6 +6,12 @@ export function Astar( board, start, finish){
     const fringe = [start];
     const closedSet = new Set();
     console.log("Astar", board, start, finish);
+    for(const row of board){
+        for(const node of row){
+            if(node.isStart || node.isFinish) continue; 
+            node.distance = Infinity
+        }
+    }
     
     start.distance = 0
     while(fringe.length>0){

@@ -8,6 +8,12 @@ export function GreedyBFS(board, start, finish) {
   
     start.distance = 0;
     fringe.push(start);
+    for(const row of board){
+        for(const node of row){
+            if(node.isStart || node.isFinish) continue; 
+            node.distance = Infinity
+        }
+    }
   
     while (fringe.length > 0) {
       sortNodesByDistance(fringe, finish);
