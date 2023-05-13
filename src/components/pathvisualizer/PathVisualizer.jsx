@@ -30,6 +30,7 @@ function PathVisualizer() {
             isVisited: false,
             isWall: false,
             previousNode: null,
+            isPath: false,
     }
 }
 
@@ -52,9 +53,14 @@ function PathVisualizer() {
         createGrid();
     }, [])
 
+
+    
+
    
     function DjikstrasVisualizer(){
         resetBoardWithWalls();
+        setIsRunning(true);
+
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = Djikstras.djikstras(nodes, startNode, finishNode);
@@ -66,16 +72,18 @@ function PathVisualizer() {
 
     function AstarVisualizer(){
         resetBoardWithWalls();
+        setIsRunning(true);
         const temp = nodes;
         const startNode = temp[START_NODE_ROW][START_NODE_COL];
         const finishNode = temp[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = Astar.Astar(nodes, startNode, finishNode);
-        console.log("here222",visitedNodesInOrder);
         animateDjikstras(visitedNodesInOrder);
     }
 
     function BFSVisualizer(){
         resetBoardWithWalls();
+        setIsRunning(true);
+
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = BFS.bfs(nodes, startNode, finishNode);
@@ -85,6 +93,8 @@ function PathVisualizer() {
 
     function DFSVisualizer(){
         resetBoardWithWalls();
+        setIsRunning(true);
+
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = BFS.dfs(nodes, startNode, finishNode);
@@ -94,6 +104,8 @@ function PathVisualizer() {
 
     function GreedyBFSVisualizer(){
         resetBoardWithWalls();
+        setIsRunning(true);
+
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = GreedySearch.GreedyBFS(nodes, startNode, finishNode);
@@ -172,8 +184,14 @@ function PathVisualizer() {
             setTimeout(() => {
                 const node = nodesInShortestPathOrder[i]
                 document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-path'
+                if(nodesInShortestPathOrder.length-1 === i){
+                    setIsRunning(false);
+                }
             }, 50 * i);
+            
         }
+
+        
     }
 
     function toggleWall(row,col){
@@ -395,12 +413,12 @@ function PathVisualizer() {
 
   return (
     <>
-        <button onClick={DjikstrasVisualizer}>Djikstras</button>
-        <button onClick={BFSVisualizer}>BFS</button>
-        <button onClick={DFSVisualizer}>DFS</button>
-        <button onClick={AstarVisualizer}>A*</button>
-        <button onClick={GreedyBFSVisualizer}>GreedyBFS</button>
-        <button onClick={resetBoard}>Reset</button>
+        <button onClick={DjikstrasVisualizer} disabled={isRunning}>Djikstras</button>
+        <button onClick={BFSVisualizer} disabled={isRunning}>BFS</button>
+        <button onClick={DFSVisualizer} disabled={isRunning}>DFS</button>
+        <button onClick={AstarVisualizer}disabled={isRunning}>A*</button>
+        <button onClick={GreedyBFSVisualizer}disabled={isRunning} >GreedyBFS</button>
+        <button onClick={resetBoard} disabled={isRunning}>Reset</button>
 
     <div className="nodeContainer">
 
