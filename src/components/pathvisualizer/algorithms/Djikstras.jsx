@@ -2,10 +2,11 @@ export function djikstras( board, start, finish){
     if(!start || !finish || start === finish){
         return false
     }
+    
     const visitedNodesInOrder = []
     start.distance = 0
     const unvisitedNodes = getAllNodes(board);
-    while(!!unvisitedNodes.length){
+    while(unvisitedNodes.length>0){
         sortNodesByDistance(unvisitedNodes)
         const closestNode = unvisitedNodes.shift()
         if(closestNode.isWall) continue
@@ -15,6 +16,7 @@ export function djikstras( board, start, finish){
         if(closestNode === finish) return visitedNodesInOrder
         updateUnvisitedNeighbors(closestNode, board)
     }
+
 
 }
 

@@ -16,6 +16,8 @@ function PathVisualizer() {
     const [START_NODE_COL, setStartCol] = useState(15);
     const [FINISH_NODE_ROW, setFinish] = useState(10);
     const [FINISH_NODE_COL, setFinishCol] = useState(35);
+    const [isRunning, setIsRunning] = useState(false);
+    
     
 
     const createNode = (col, row) => {
@@ -47,11 +49,12 @@ function PathVisualizer() {
     }
 
     useEffect(() => {
-        createGrid()
+        createGrid();
     }, [])
 
+   
     function DjikstrasVisualizer(){
-
+        resetBoardWithWalls();
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = Djikstras.djikstras(nodes, startNode, finishNode);
@@ -62,15 +65,17 @@ function PathVisualizer() {
     }
 
     function AstarVisualizer(){
-        const startNode = nodes[START_NODE_ROW][START_NODE_COL];
-        const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
+        resetBoardWithWalls();
+        const temp = nodes;
+        const startNode = temp[START_NODE_ROW][START_NODE_COL];
+        const finishNode = temp[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = Astar.Astar(nodes, startNode, finishNode);
-
+        console.log("here222",visitedNodesInOrder);
         animateDjikstras(visitedNodesInOrder);
     }
 
     function BFSVisualizer(){
-
+        resetBoardWithWalls();
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = BFS.bfs(nodes, startNode, finishNode);
@@ -79,6 +84,7 @@ function PathVisualizer() {
     }
 
     function DFSVisualizer(){
+        resetBoardWithWalls();
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = BFS.dfs(nodes, startNode, finishNode);
@@ -87,6 +93,7 @@ function PathVisualizer() {
     }
 
     function GreedyBFSVisualizer(){
+        resetBoardWithWalls();
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = GreedySearch.GreedyBFS(nodes, startNode, finishNode);
@@ -269,6 +276,121 @@ function PathVisualizer() {
         setNodes(tempBoard);
     }
 
+    function resetBoardWithWalls(){
+
+        setStart(START_NODE_ROW);
+        setStartCol(START_NODE_COL);
+        setFinish(FINISH_NODE_ROW);
+        setFinishCol(FINISH_NODE_COL);
+        
+        const tempBoard = nodes.slice();
+        for(let row = 0; row < tempBoard.length; row++){
+            for(let col = 0; col < tempBoard[0].length; col++){
+                const node = tempBoard[row][col];
+               
+                if(node.isPath || node.isVisited){
+                    tempBoard[row][col].isVisited = false;
+                    tempBoard[row][col].isPath = false;
+                    tempBoard[row][col].distance = Infinity;
+
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
+
+                }
+                if(node.isWall){
+                    tempBoard[row][col].isWall = true;
+                    tempBoard[row][col].distance = Infinity;
+
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-wall'
+
+                }
+
+                if(node.isStart){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-start'
+
+                }
+
+                if(node.isFinish){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-finish'
+
+                }
+                    
+
+                }
+
+
+                
+                
+            }
+
+
+
+        
+        setNodes(tempBoard);
+
+    }
+
+    
+
+
+
+    function resetBoard(){
+
+        setStart(START_NODE_ROW);
+        setStartCol(START_NODE_COL);
+        setFinish(FINISH_NODE_ROW);
+        setFinishCol(FINISH_NODE_COL);
+        
+        const tempBoard2 = nodes.slice();
+        for(let row = 0; row < tempBoard2.length; row++){
+            for(let col = 0; col < tempBoard2[0].length; col++){
+                const node = tempBoard2[row][col];
+
+                if(node.isVisited){
+                    tempBoard2[row][col].isVisited = false;
+                    tempBoard2[row][col].distance = Infinity;
+
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
+                }
+                if(node.isPath){
+                    tempBoard2[row][col].isPath = false;
+                    tempBoard2[row][col].distance = Infinity;
+
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
+                }
+                if(node.isWall){
+                    tempBoard2[row][col].isWall = false;
+                    tempBoard2[row][col].distance = Infinity;
+
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
+                }
+                if(node.isStart){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-start'
+
+                }
+
+                if(node.isFinish){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-finish'
+
+                }
+                    
+
+                }
+
+
+                
+                
+            }
+
+
+
+        
+        setNodes(tempBoard2);
+
+    }
+
+
+    
+
     
 
   return (
@@ -278,6 +400,7 @@ function PathVisualizer() {
         <button onClick={DFSVisualizer}>DFS</button>
         <button onClick={AstarVisualizer}>A*</button>
         <button onClick={GreedyBFSVisualizer}>GreedyBFS</button>
+        <button onClick={resetBoard}>Reset</button>
 
     <div className="nodeContainer">
 

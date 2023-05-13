@@ -15,12 +15,12 @@
     transition: background-color 0.2s;
 }
 
-
-.node-path{
-    animation-duration: 0.2s;
-    animation-name: shortestPath;
-    background-color: #00ffff;
+.node-unvisited{
+    background-color: black;
 }
+
+
+
 
 .node-finish{
     background-color: #ff0000;
@@ -37,6 +37,12 @@
     animation-duration: 0.2s;
     animation-name: visitedAnimation;
     background-color: #ffff00;
+}
+
+.node-path{
+    animation-duration: 0.2s;
+    animation-name: shortestPath;
+    background-color: #00ffff;
 }
 
 @media screen and (max-width: 1643px) {

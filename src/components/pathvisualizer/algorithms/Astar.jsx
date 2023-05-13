@@ -3,10 +3,10 @@ export function Astar( board, start, finish){
         return false
     }
     const visitedNodesInOrder = []
-    const fringe = [];
-    fringe.push(start);
+    const fringe = [start];
     const closedSet = new Set();
-
+    console.log("Astar", board, start, finish);
+    
     start.distance = 0
     while(fringe.length>0){
         sortNodesByDistance(fringe, finish)
@@ -19,6 +19,8 @@ export function Astar( board, start, finish){
         closedSet.add(closestNode)
         updateNeighborsWithHeuristic(closestNode, board, fringe);
     }
+
+
 
 }
 
@@ -66,10 +68,12 @@ function getUnvisitedNeighbors(node, board){
     if(row < board.length - 1) neighbors.push(board[row + 1][col])
     if(col > 0) neighbors.push(board[row][col - 1])
     if(col < board[0].length - 1) neighbors.push(board[row][col + 1])
+
     return neighbors.filter(neighbor => !neighbor.isVisited)
+
 }
 
-export function visitedNodesInOrder( finishNode){
+export function visitedNodesInOrder(finishNode){
     const nodesInShortestPathOrder = []
     let currentNode = finishNode
     while(currentNode !== null){
