@@ -170,6 +170,8 @@ function PathVisualizer() {
     }
 
     function toggleWall(row,col){
+
+        if(row === START_NODE_ROW && col === START_NODE_COL || row === FINISH_NODE_ROW && col === FINISH_NODE_COL) return;
         const tempBoard = nodes.slice();
         const node =  tempBoard[row][col];
         const newNode = {
@@ -182,14 +184,12 @@ function PathVisualizer() {
 
     function handleMouseDown(row,col){
         if(nodes[row][col].isStart){
-            moveStart(row,col);
             setStartIsPressed(true);
             setMouseIsPressed(true);
 
         }
 
         if(nodes[row][col].isFinish){
-            moveGoal(row,col);
             setFinishIsPressed(true);
             setMouseIsPressed(true);
         }
@@ -202,7 +202,11 @@ function PathVisualizer() {
 
     function handleMouseEnter(row,col){
         if(!mouseIsPressed) return;
-        if(startIsPressed){
+        if(startIsPressed ){
+
+            if(row === FINISH_NODE_ROW && col === FINISH_NODE_COL) return;
+            if(nodes[row][col].isWall) return;
+
             moveStart(row,col);
             return;
         }
