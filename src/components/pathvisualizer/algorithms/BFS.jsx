@@ -16,7 +16,6 @@ export function bfs( board, start, finish){
         if(currentNode === finish) return visitedNodesInOrder;
         const unvisitedNeighbors = updateUnvisitedNeighbors(currentNode, board, fringe);
     }
-    return visitedNodesInOrder;
 
 }
 
@@ -40,7 +39,6 @@ export function dfs(board, start, finish) {
             stack.push(neighbor);
         }
     }
-    return visitedNodesInOrder;
 }
 
 function getAllNodes(board){

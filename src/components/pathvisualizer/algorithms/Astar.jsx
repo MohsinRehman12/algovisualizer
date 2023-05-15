@@ -6,6 +6,7 @@ export function Astar( board, start, finish){
     const fringe = [start];
     const closedSet = new Set();
     console.log("Astar", board, start, finish);
+
     for(const row of board){
         for(const node of row){
             if(node.isStart || node.isFinish) continue; 
@@ -14,10 +15,12 @@ export function Astar( board, start, finish){
     }
     
     start.distance = 0
+
     while(fringe.length>0){
         sortNodesByDistance(fringe, finish)
         const closestNode = fringe.shift()
         if(closestNode.isWall || closedSet.has(closestNode)) continue
+
         if(closestNode.distance === Infinity) return visitedNodesInOrder
         closestNode.isVisited = true
         visitedNodesInOrder.push(closestNode)
@@ -25,8 +28,6 @@ export function Astar( board, start, finish){
         closedSet.add(closestNode)
         updateNeighborsWithHeuristic(closestNode, board, fringe);
     }
-
-
 
 }
 
@@ -88,3 +89,9 @@ export function visitedNodesInOrder(finishNode){
     }
     return nodesInShortestPathOrder
 }
+
+
+
+
+
+

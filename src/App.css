@@ -42,3 +42,18 @@
   margin: 0px !important;
   padding: 0px !important;
 }
+
+.imgCardBox{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.static.false{
+  color: red !important;
+}
+
+.static.true{
+  color: green !important;
+}

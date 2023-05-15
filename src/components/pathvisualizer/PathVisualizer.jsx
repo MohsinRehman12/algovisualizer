@@ -19,6 +19,7 @@ function PathVisualizer() {
     const [FINISH_NODE_COL, setFinishCol] = useState(35);
     const [isRunning, setIsRunning] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState(11);
+    const [endIsReachable, setEndIsReachable] = useState(true);
     
 
     const createNode = (col, row) => {
@@ -64,6 +65,7 @@ function PathVisualizer() {
 
         const startNode = nodes[START_NODE_ROW][START_NODE_COL];
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
+
         const visitedNodesInOrder = Djikstras.djikstras(nodes, startNode, finishNode);
         const nodesInShortestPathOrder = Djikstras.visitedNodesInOrder(finishNode);
         animateDjikstras(visitedNodesInOrder);
@@ -71,15 +73,23 @@ function PathVisualizer() {
 
     }
 
+    
     function AstarVisualizer(){
         resetBoardWithWalls();
         setIsRunning(true);
         const temp = nodes;
         const startNode = temp[START_NODE_ROW][START_NODE_COL];
         const finishNode = temp[FINISH_NODE_ROW][FINISH_NODE_COL];
-        const visitedNodesInOrder = Astar.Astar(nodes, startNode, finishNode);
-        animateDjikstras(visitedNodesInOrder);
+        setEndIsReachable(true);
+
+        const visitedNodesInOrders = Astar.Astar(temp, startNode, finishNode);
+
+        console.log('visitedNodesInOrder', visitedNodesInOrders);
+
+        animateDjikstras(visitedNodesInOrders);        
+        
     }
+    
 
     function BFSVisualizer(){
         resetBoardWithWalls();
@@ -115,6 +125,11 @@ function PathVisualizer() {
     }
 
     function animateBFS(visitedNodesInOrder){
+        if(visitedNodesInOrder === undefined){
+            setEndIsReachable(false);
+            return;
+        }
+        else{
         for(let i = 0; i < visitedNodesInOrder.length; i++){
             const tempBoard = nodes.slice();
             const node = visitedNodesInOrder[i];
@@ -142,12 +157,17 @@ function PathVisualizer() {
             }, animationSpeed * i);
         }
 
-        console.log("here",nodes);
+    }
+
 
     }
 
     function animateDjikstras(visitedNodesInOrder){
-        console.log("here",visitedNodesInOrder);
+        if(visitedNodesInOrder === undefined){
+            setEndIsReachable(false);
+            return;
+        }
+        else{
         for(let i = 0; i < visitedNodesInOrder.length; i++){
             const tempBoard = nodes.slice();
             const node = visitedNodesInOrder[i];
@@ -178,6 +198,7 @@ function PathVisualizer() {
         }
 
 
+    }
     }
 
     function animateShortestPath(nodesInShortestPathOrder){
@@ -412,7 +433,7 @@ function PathVisualizer() {
 
 
 
-        
+        setEndIsReachable(true);
         setNodes(tempBoard2);
 
     }
@@ -424,9 +445,19 @@ function PathVisualizer() {
 
     useEffect(() => {
         
-        console.log("board",nodes)
+        if(!endIsReachable){
+            setIsRunning(false);
+
+        }
+
+
+
+
         
-    },[isRunning])
+    },[endIsReachable])
+
+
+
 
 
 
@@ -446,6 +477,7 @@ function PathVisualizer() {
         <button className="bar-button" onClick={GreedyBFSVisualizer}disabled={isRunning} >GreedyBFS</button>
         <button className="bar-button" onClick={resetBoard} disabled={isRunning}>Reset</button>
     </div>
+    <h2 className='validText'> {endIsReachable ? "" :"The Goal Cant Be Reached"}</h2>
     <div className="nodeContainer">
 
 
