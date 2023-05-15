@@ -67,7 +67,6 @@ function PathVisualizer() {
         const finishNode = nodes[FINISH_NODE_ROW][FINISH_NODE_COL];
 
         const visitedNodesInOrder = Djikstras.djikstras(nodes, startNode, finishNode);
-        const nodesInShortestPathOrder = Djikstras.visitedNodesInOrder(finishNode);
         animateDjikstras(visitedNodesInOrder);
         console.log("here",nodes);
 
@@ -251,15 +250,16 @@ function PathVisualizer() {
         }
     }
 
-    function handleMouseEnter(row,col){
+    function handleMouseOver(row,col){
         if(!mouseIsPressed) return;
         if(startIsPressed ){
 
             if(row === FINISH_NODE_ROW && col === FINISH_NODE_COL) return;
             if(nodes[row][col].isWall) return;
-
-            moveStart(row,col);
-            return;
+            else{
+                moveStart(row,col);
+                return;
+            }
         }
         if(finishIsPressed){
 
@@ -359,8 +359,18 @@ function PathVisualizer() {
 
                 }
 
+                if(node.isStart && (node.row !== START_NODE_ROW || node.col !== START_NODE_COL)){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
+
+                }
+
                 if(node.isFinish){
                     document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-finish'
+
+                }
+
+                if(node.isFinish && (node.row !== FINISH_NODE_ROW || node.col !== FINISH_NODE_COL)){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
 
                 }
                     
@@ -418,8 +428,18 @@ function PathVisualizer() {
 
                 }
 
+                if(node.isStart && (node.row !== START_NODE_ROW || node.col !== START_NODE_COL)){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
+
+                }
+
                 if(node.isFinish){
                     document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-finish'
+
+                }
+
+                if(node.isFinish && (node.row !== FINISH_NODE_ROW || node.col !== FINISH_NODE_COL)){
+                    document.getElementById(`node-${node.row}-${node.col}`).className = 'nodeBox node-unvisited'
 
                 }
                     
@@ -449,10 +469,6 @@ function PathVisualizer() {
             setIsRunning(false);
 
         }
-
-
-
-
         
     },[endIsReachable])
 
@@ -496,7 +512,7 @@ function PathVisualizer() {
                       isWall={isWall}
                       isPath={false}
                       onMouseDown={(row,col) => handleMouseDown(row,col)}
-                      onMouseEnter={(row,col) => handleMouseEnter(row,col)}
+                      onMouseOver={(row,col) => handleMouseOver(row,col)}
                       onMouseUp={() => handleMouseUp()}
                       id={`node-${row}-${col}`}
                     ></Node>)}

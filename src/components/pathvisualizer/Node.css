@@ -44,6 +44,12 @@
     animation-name: shortestPath;
     background-color: #00ffff;
 }
+.validText{
+    color: white;
+    font-weight: 500;
+}
+
+
 
 @media screen and (max-width: 1643px) {
     .nodeBox{
