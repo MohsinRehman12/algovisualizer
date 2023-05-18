@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
+import * as PriorityAlgoritms from './algorithms/Priority';
+import * as SJF from './algorithms/SJF';
 
 import './scheduling.css'
 function SchedulingVisualizer() {
@@ -21,6 +23,14 @@ function SchedulingVisualizer() {
 
     const [users, setUsers] = useState(INITIAL_STATE);
     
+    const updateUserState = (newUsers) => {
+        setUsers(newUsers);
+    };
+
+    const updateRunningState = (newRunningState) => {
+        setIsRunning(newRunningState);
+    };
+
     const renderUsers = () => {
         return users.map(({id, arrival, burst, priority }) => {
         
@@ -129,60 +139,8 @@ function SchedulingVisualizer() {
     
 
 
-    function sjf() {
-      const newClicked = true;
-      setClicked(newClicked);
-    
-      if (newClicked) {
-        var auxillaryArray = users.slice();
-        var auxillaryArray2 = users.slice(1);
-        var auxillaryArray3 = auxillaryArray.slice(0, 1);
-        
-        auxillaryArray.sort((a, b) => a.arrival - b.arrival);
-
-        auxillaryArray.sort((a, b) => a.arrival - b.arrival);
-        auxillaryArray2.sort((a, b) => a.burst - b.burst);
-    
-        auxillaryArray = auxillaryArray3.concat(auxillaryArray2);
-        auxillaryArray = auxillaryArray.filter((process) => process.arrival !== null || process.burst !== null);
-        console.log("aaaa",auxillaryArray);
-    
-        let currentTime = 0;
-        
-        
-        auxillaryArray.forEach((process, index) => {
-          if (index > 0) {
-
-            let preempt=false;
-            const previousProcess = auxillaryArray[index - 1];
-
-            var initialArrival = +auxillaryArray[0].arrival;
-
-            currentTime = currentTime+ +previousProcess.burst;
-
-
-            
-
-            var auxillaryArray5 = users.slice(index);
-            var auxillaryArray6 = auxillaryArray5.filter((process) => process.burst <= (currentTime+initialArrival));
-
-            console.log("bbbb", auxillaryArray6);
-            const idleTime = +process.arrival - (currentTime + initialArrival);
-            if (idleTime > 0) {
-              const idleProcess = {
-                id: 'idle',
-                arrival: currentTime + initialArrival,
-                burst: idleTime,
-                priority: null
-              };
-              auxillaryArray.splice(index, 0, idleProcess);
-            }
-          }
-        });
-
-    
-        setArray2(auxillaryArray);
-      }
+    function sjf(){
+      setArray2(SJF.sjf(users, updateUserState));
     }
 
     
@@ -192,80 +150,7 @@ function SchedulingVisualizer() {
     
 
     function sjrfScheduling() {
-      setIsRunning(true);
-      console.log("sjrfScheduling called");
-      let processes = [...users];
-      console.log("users", users);
-      const ganttChart = [];
-    
-      if (processes[0].arrival !== null || processes[0].burst !== null) {
-        processes.sort((a, b) => a.arrival - b.arrival || a.burst - b.burst);
-    
-        let currentTime = 0;
-        let completedProcesses = 0;
-    
-        while (completedProcesses < processes.length) {
-          let nextProcess = null;
-          let shortestTime = Infinity;
-    
-          for (let i = 0; i < processes.length; i++) {
-            if (
-              processes[i].arrival <= currentTime &&
-              processes[i].burst < shortestTime &&
-              processes[i].burst > 0
-            ) {
-              nextProcess = processes[i];
-              shortestTime = processes[i].burst;
-            }
-          }
-    
-          if (nextProcess === null) {
-            currentTime++;
-            ganttChart.push({ id: "idle", arrival: currentTime, burst: 1 });
-            continue;
-          }
-    
-          ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1 });
-    
-          nextProcess.burst--;
-          currentTime++;
-    
-          if (nextProcess.burst === 0) {
-            completedProcesses++;
-          }
-        }
-
-        if(completedProcesses === processes.length){
-          
-          for(let i=0; i<ganttChart.length; i++){
-            let k=0;
-            if(i<ganttChart.length-1){
-
-              if(ganttChart[i].id === ganttChart[i+1].id){
-                for(let j=i+1; j<ganttChart.length; j++){
-                  if(ganttChart[j].id === ganttChart[i].id){
-                    k++;
-                    ganttChart[i].burst = ganttChart[i].burst + ganttChart[j].burst;
-
-                  }
-                  else{
-                    break;
-                  }
-                }
-                ganttChart.splice(i+1, k);
-                
-              }
-            }
-          }
-
-          setIsRunning(false);
-          setArray2(ganttChart);
-          clearTable();
-        }
-       
-      }
-
-    
+      setArray2(SJF.sjrfScheduling(users, isRunning, updateUserState));
 
       
     }
@@ -309,6 +194,7 @@ function SchedulingVisualizer() {
 
     useEffect(() => {
       setIsEmptied(!isTableFilled());
+      console.log("users", users);
     }, [users]);
     
     
@@ -330,6 +216,11 @@ function SchedulingVisualizer() {
       </div>
     );
   };
+
+  function priorityScheduling(){
+    
+    setArray2(PriorityAlgoritms.priorityScheduling(users, isRunning, updateUserState));
+  }
   
 
   
@@ -344,6 +235,7 @@ function SchedulingVisualizer() {
     <button onClick={fcfs} disabled={isEmptied}> FCFS </button>
     <button onClick={sjf} disabled={isEmptied}> SJF </button>
     <button onClick={sjrfScheduling} disabled={isEmptied}> SJF Preempting </button>
+    <button onClick={priorityScheduling} disabled={isEmptied}> Priority </button>
     <button onClick={clearTable}> Reset State </button>
 
     {array2 && returnArray(array2)}
