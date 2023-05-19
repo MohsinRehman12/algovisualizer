@@ -119,14 +119,31 @@ function clearTable(users, updateUserState) {
         currentTime += executionTime;
   
         // Add the process to the Gantt chart
-        ganttChart.push({
-          id: process.id,
-          start: currentTime - executionTime,
-          finish: currentTime,
-          arrival: process.arrival,
-          burst: executionTime,
-          priority: process.priority
-        });
+
+        if(process.burst==0 && n==1){
+          ganttChart.push({
+            id: process.id,
+            start: currentTime - executionTime,
+            finish: currentTime,
+            arrival: process.arrival,
+            burst: executionTime,
+            priority: process.priority,
+            last : true,
+          });
+
+        }
+        else{
+          ganttChart.push({
+            id: process.id,
+            start: currentTime - executionTime,
+            finish: currentTime,
+            arrival: process.arrival,
+            burst: executionTime,
+            priority: process.priority
+          });
+
+        }
+        
   
         // Check if the process has finished
         if (process.burst <= 0) {
@@ -141,7 +158,7 @@ function clearTable(users, updateUserState) {
       }
 
       else{
-        
+
         const allCompleted = processes.every((p) => p.completed);
         const nextArrival = Math.min(...processes.filter((p) => !p.completed).map((p) => p.arrival));
         if (nextArrival !== null && !allCompleted && nextArrival > currentTime) {
