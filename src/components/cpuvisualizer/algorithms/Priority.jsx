@@ -48,8 +48,8 @@ export function priorityScheduling(users, isRunning, updateUserState) {
         }
   
         if (nextProcess === null) {
+          ganttChart.push({ id: "idle", arrival: currentTime, burst: 1, start: currentTime, finish: currentTime, priority: Infinity });
           currentTime++;
-          ganttChart.push({ id: "idle", arrival: currentTime, burst: 1 });
           continue;
         }
   
@@ -60,7 +60,7 @@ export function priorityScheduling(users, isRunning, updateUserState) {
           combinedProcesses[nextProcess.id] = { ...nextProcess };
         }
   
-        ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1 });
+        ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1, start: currentTime, finish: currentTime, priority: nextProcess.priority });
   
         nextProcess.burst--;
         currentTime++;
@@ -83,15 +83,23 @@ export function priorityScheduling(users, isRunning, updateUserState) {
                   if(ganttChart[j].id === ganttChart[i].id){
                     k++;
                     ganttChart[i].burst = ganttChart[i].burst + ganttChart[j].burst;
+
   
                   }
                   else{
                     break;
                   }
                 }
+
+                ganttChart[i].finish = ganttChart[i].finish + ganttChart[i].burst;
                 ganttChart.splice(i+1, k);
   
               }
+            }
+
+            if(i===ganttChart.length-1){
+          
+              ganttChart[i].last = true;
             }
           }
         isRunning=false;

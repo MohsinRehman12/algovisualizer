@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import * as PriorityAlgoritms from './algorithms/Priority';
 import * as SJF from './algorithms/SJF';
+import * as FCFS from './algorithms/FCFS';
+import * as RR from './algorithms/RoundRobin';
 
 import './scheduling.css'
 function SchedulingVisualizer() {
@@ -11,6 +13,7 @@ function SchedulingVisualizer() {
     const [order, setOrder] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
     const [isEmptied, setIsEmptied] = useState(true);
+    const [timeIntervals, setTimeIntervals] = useState([]);
 
 
 
@@ -102,40 +105,10 @@ function SchedulingVisualizer() {
 
 
     function fcfs() {
-      setArray2([]);
-      const newClicked = true;
-      setClicked(newClicked);
-    
-      if (newClicked) {
-        const auxillaryArray = users.slice();
-        var timePassed = 0;
-
-    
-        auxillaryArray.sort((a, b) => a.arrival - b.arrival);
-
-        auxillaryArray.forEach((process, index) => {
-          if (index > 0) {
-            const previousProcess = auxillaryArray[index - 1];
-            const processTime = +previousProcess.arrival + +previousProcess.burst;
-            var initialArrival = +auxillaryArray[0].arrival;
-            timePassed += +previousProcess.burst ;
-            const idleTime = +process.arrival - (timePassed + initialArrival);
-            console.log(processTime, previousProcess.arrival, previousProcess.burst);
-            if (idleTime > 0) {
-              const idleProcess = {
-                id: 'idle',
-                arrival: timePassed + initialArrival,
-                burst: idleTime,
-                priority: null
-              };
-              auxillaryArray.splice(index, 0, idleProcess);
-            }
-          }
-        });
-    
-        setArray2(auxillaryArray);
-      }
+      setArray2(FCFS.fcfs(users, updateUserState));
+      
     }
+    
     
 
 
@@ -153,6 +126,11 @@ function SchedulingVisualizer() {
       setArray2(SJF.sjrfScheduling(users, isRunning, updateUserState));
 
       
+    }
+
+    function roundRobinScheduling() {
+
+    setArray2(RR.roundRobinScheduling(users, 3, updateUserState));
     }
 
     
@@ -194,29 +172,77 @@ function SchedulingVisualizer() {
 
     useEffect(() => {
       setIsEmptied(!isTableFilled());
-      console.log("users", users);
     }, [users]);
     
     
 
-  const returnArray = (arrayA) => {
+  const ReturnArray = (arrayA) => {
+
+    
+
+
+    function colorMaker(){
+      const fringe =[];
+      arrayA.forEach(element => {
+
+        if(fringe.includes(element.id)){
+          element.color = arrayA[fringe.indexOf(element.id)].color;
+
+        }
+        else{
+          element.color = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+        }
+        fringe.push(element.id);
+
+      });
+    }
+
+    colorMaker();
   
     return (
+      <>
       <div className="testBox">
         {arrayA.map((process, index) => (
           <div
             key={index}
             className="test"
-            style={{ flex: `${process.burst} 0 0` }}
+            style={{ flex: `${process.burst} 0 0`, backgroundColor: `${process.color}`, background : '20%' }}
           >
             {process.id}
-            <div className="underText"></div>
+            
+            
           </div>
+          
         ))}
-      </div>
-    );
-  };
+    </div>
 
+    <div className="testBox">
+      {arrayA.map((process, index) => (
+
+          <div
+            key={index}
+            className="intervalBox"
+            style={{ flex: `${process.burst} 0 0` }}
+          >
+            <p>
+              {process.start}
+            </p>
+
+            <p>
+            {process.last ? process.finish : null}
+            </p>
+          </div>
+          
+        ))}
+    </div>
+    </>
+  )
+
+
+};
+
+ 
   function priorityScheduling(){
     
     setArray2(PriorityAlgoritms.priorityScheduling(users, isRunning, updateUserState));
@@ -236,9 +262,10 @@ function SchedulingVisualizer() {
     <button onClick={sjf} disabled={isEmptied}> SJF </button>
     <button onClick={sjrfScheduling} disabled={isEmptied}> SJF Preempting </button>
     <button onClick={priorityScheduling} disabled={isEmptied}> Priority </button>
+    <button onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
     <button onClick={clearTable}> Reset State </button>
 
-    {array2 && returnArray(array2)}
+    {array2 && ReturnArray(array2)}
 
 
     

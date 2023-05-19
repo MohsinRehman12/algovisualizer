@@ -1,19 +1,24 @@
 .test{
-    background-color: rgb(145, 145, 145);
-    border: 1px solid black;
+
+    
+    border: 1px solid whitesmoke;
     display: flex;
     text-align: center;
     height: 60px;
     align-items: center;
     justify-content: center;
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 
     box-shadow: 5px 5px 50px 5px rgba(180, 179, 179, 0.2);
 
 }
 
-.underProcessText{
-    text-align: left;
-}
+
 
 .testBox{
     display: flex;
@@ -21,6 +26,27 @@
     width: 80%;
 
     margin-left: 10%;
+}
+
+
+
+.intervalBox{
+    background-color: transparent;
+    border-left: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+    border-top: 1px solid whitesmoke;
+    text-align: left;
+    height: 20px;
+    color: whitesmoke;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.finalProcess{
+    display: flex;
+    
 }
 
 .processTable{

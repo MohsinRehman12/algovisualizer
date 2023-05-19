@@ -46,12 +46,13 @@ function clearTable(users, updateUserState) {
         }
   
         if (nextProcess === null) {
+          ganttChart.push({ id: "idle", arrival: currentTime, burst: 1, start: currentTime, finish: currentTime });
           currentTime++;
-          ganttChart.push({ id: "idle", arrival: currentTime, burst: 1 });
+
           continue;
         }
   
-        ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1 });
+        ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1, start: currentTime, finish: currentTime });
   
         nextProcess.burst--;
         currentTime++;
@@ -78,9 +79,18 @@ function clearTable(users, updateUserState) {
                   break;
                 }
               }
+
+              ganttChart[i].finish = ganttChart[i].finish + ganttChart[i].burst;
+              
+
               ganttChart.splice(i+1, k);
 
             }
+          }
+
+          if(i===ganttChart.length-1){
+          
+            ganttChart[i].last = true;
           }
         }
 
@@ -122,7 +132,32 @@ function clearTable(users, updateUserState) {
       let currentTime = 0;
       
       
-      auxillaryArray.forEach((process, index) => {
+      for(var index = 0; index < auxillaryArray.length; index++) {
+        let process = auxillaryArray[index];
+        if(index==0 && process.arrival==0){                
+            const processTemp ={
+              id: process.id,
+              arrival: process.arrival,
+              burst: process.burst,
+              start: +process.arrival,
+              finish: +process.burst,
+            }
+
+            auxillaryArray.splice(index, 1, processTemp);
+          
+          }
+
+          if(index==0 && process.arrival!=0){
+            const idleProcess = {
+              id: 'idle',
+              arrival: 0,
+              burst: process.arrival,
+              start: 0,
+              finish: process.arrival,
+              priority: null
+            };
+            auxillaryArray.unshift(idleProcess);
+        }
         if (index > 0) {
 
 
@@ -130,17 +165,60 @@ function clearTable(users, updateUserState) {
           currentTime += +auxillaryArray[index - 1].burst;
 
           const idleTime = +process.arrival - (currentTime + initialArrival);
+          if(index==0 && process.arrival!=0){
+            const idleProcess = {
+              id: 'idle',
+              arrival: 0,
+              burst: process.arrival,
+              start: 0,
+              finish: process.arrival,
+              priority: null
+            };
+            auxillaryArray.unshift(idleProcess);
+          }
+        
           if (idleTime > 0) {
             const idleProcess = {
               id: 'idle',
               arrival: currentTime + initialArrival,
               burst: idleTime,
+              start: currentTime + initialArrival,
+              finish: currentTime + initialArrival + idleTime,
               priority: null
             };
             auxillaryArray.splice(index, 0, idleProcess);
           }
+          else{
+
+            if(index == auxillaryArray.length-1){
+              
+              const processTemp ={
+                id: process.id,
+                arrival: process.arrival,
+                burst: process.burst,
+                start: +currentTime + +initialArrival,
+                finish: +currentTime + +initialArrival + +process.burst,
+                last: true
+              }
+
+              auxillaryArray.splice(index, 1, processTemp);
+            
+            }
+            else{
+              const processTemp ={
+                id: process.id,
+                arrival: process.arrival,
+                burst: process.burst,
+                start: +currentTime + +initialArrival,
+                finish: +currentTime + +initialArrival + +process.burst,
+              }
+              auxillaryArray.splice(index, 1, processTemp);
+
+            }
+          }
+          
         }
-      });
+      };
 
   
       return auxillaryArray;
