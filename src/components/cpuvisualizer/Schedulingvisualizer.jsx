@@ -207,7 +207,7 @@ function SchedulingVisualizer() {
           <div
             key={index}
             className="test"
-            style={{ flex: `${process.burst} 0 0`, backgroundColor: `${process.color}`, background : '20%' }}
+            style={{ flex: `${process.burst} 0 0`, backgroundColor: `${process.color}`}}
           >
             {process.id}
             
@@ -256,14 +256,14 @@ function SchedulingVisualizer() {
     <>
     {renderTable()}
 
-    <button onClick={addRow}> + </button>
-    <button onClick={deleteRow}> - </button>
-    <button onClick={fcfs} disabled={isEmptied}> FCFS </button>
-    <button onClick={sjf} disabled={isEmptied}> SJF </button>
-    <button onClick={sjrfScheduling} disabled={isEmptied}> SJF Preempting </button>
-    <button onClick={priorityScheduling} disabled={isEmptied}> Priority </button>
-    <button onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
-    <button onClick={clearTable}> Reset State </button>
+    <button className='bar-button' onClick={addRow}> + </button>
+    <button className='bar-button' onClick={deleteRow}> - </button>
+    <button className='bar-button' onClick={fcfs} disabled={isEmptied}> FCFS </button>
+    <button className='bar-button' onClick={sjf} disabled={isEmptied}> SJF </button>
+    <button className='bar-button' onClick={sjrfScheduling} disabled={isEmptied}> SJF Preempting </button>
+    <button className='bar-button' onClick={priorityScheduling} disabled={isEmptied}> Priority </button>
+    <button className='bar-button' onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
+    <button className='bar-button' onClick={clearTable}> Reset State </button>
 
     {array2 && ReturnArray(array2)}
 
