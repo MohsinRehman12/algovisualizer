@@ -17,95 +17,62 @@ function clearTable(users, updateUserState) {
     }
 
   };
+  
+  
 
 
-  export function roundRobinScheduling2( processes, timeQuantum, updateUserState){
+  
+  
+  export function roundRobinScheduling(processes, timeQuantum, updateUserState, isRunning, updateRunningState) {
     let n = processes.length;
-    const queue = [...processes];
-    queue.sort((a, b) => a.arrival - b.arrival);
-    const ganttChart = [];
-    let currentTime = 0;
-    let process = null;
-    let completedProcess=0;
-  
-    while (completedProcess<n) {
-
-      if(process===null){
-        const nextArrival = Math.min(...queue.filter(p => !p.completed && p.arrival !== null).map(p => p.arrival));
-        currentTime=nextArrival;
-
-        const idleTime = nextArrival - currentTime;
-        currentTime += idleTime;
-        ganttChart.push({
-          id: 'idle',
-          start: currentTime - idleTime,
-          finish: currentTime,
-          burst: idleTime,
-          priority: Infinity
-        });
-
-
-
-        process = queue.shift();
-        continue;
-      }
-
-      if(process.arrival <= currentTime){
-        const executionTime = Math.min(timeQuantum, process.burst);
-        process.burst -= executionTime;
-        currentTime += executionTime;
-  
-        // Add the process to the Gantt chart
-        ganttChart.push({
-          id: process.id,
-          start: currentTime - executionTime,
-          finish: currentTime,
-          arrival: process.arrival,
-          burst: executionTime,
-          priority: process.priority
-        });
-  
-        // Check if the process has finished
-        if (process.burst <= 0) {
-          process.completed = true;
-          n--;
-        }
-  
-        // Add the process back to the queue if it still has burst time remaining
-        if (!process.completed) {
-          queue.push(process);
-        }
-      }
-
-    }
-    clearTable(processes, updateUserState);
-    return ganttChart;
-  }
-
-  
-  
-
-
-  export function calculateTAT(ganttChart){
-    let tat = 0;
-    for (let i = 0; i < ganttChart.length; i++) {
-      tat += ganttChart[i].finish - ganttChart[i].arrival;
-    }
-    tat /= ganttChart.length;
-    return tat;
-  }
-  
-  export function roundRobinScheduling(processes, timeQuantum, updateUserState) {
-    let n = processes.length;
+    const untouchedProcesses = [...processes];
     const queue = [...processes];
     const ganttChart = [];
     let currentTime = 0;
     let process = null;
+    let queue2 = [];
+
   
     while (n > 0) {
-      process = queue.shift();
+
+      process = queue2.shift();
+
+
+      console.log("process", process);
+      console.log("currentTime", currentTime);
+
+      
+
+
+      if(process==null){
+
+        const allCompleted = processes.every((p) => p.completed);
+        const nextArrival = Math.min(...processes.filter((p) => !p.completed).map((p) => p.arrival));
+        if (nextArrival !== Infinity && !allCompleted && nextArrival > currentTime) {
+          const idleTime = nextArrival - currentTime;
+          if (idleTime > 0) {
+            currentTime += idleTime;
+            queue.forEach((p) => {
+              if (p.arrival <= currentTime && !p.completed) {
+                queue2.push(p);
+                console.log("queue", p);
+              }
+            });
+
+            ganttChart.push({
+              id: 'idle',
+              start: currentTime - idleTime,
+              finish: currentTime,
+              burst: idleTime,
+              priority: Infinity
+            });
+          }
+        }
+
+      }
+
   
-      if (process.arrival <= currentTime) {
+      else {
         // No processes in the queue, check if all processes are completed
         const allCompleted = processes.every((p) => p.completed);
   
@@ -115,8 +82,28 @@ function clearTable(users, updateUserState) {
   
         // Execute the process for the time quantum or until it finishes
         const executionTime = Math.min(timeQuantum, process.burst);
-        process.burst -= executionTime;
         currentTime += executionTime;
+
+
+        for (let i = 0; i < queue.length; i++) {
+          
+
+          if(queue[i].arrival<=currentTime && !queue[i].completed){
+            let check = true;
+            for(let j=0; j<queue2.length; j++){
+              if(queue2[j].id==queue[i].id){
+                check = false;
+              }
+            }
+            if(check && queue[i].id!=process.id){
+              queue2.push(queue[i]);
+              console.log("queue", queue[i], currentTime);
+
+            }
+        }
+      }
+        process.burst -= executionTime;
+
   
         // Add the process to the Gantt chart
 
@@ -131,6 +118,8 @@ function clearTable(users, updateUserState) {
             last : true,
           });
 
+
+
         }
         else{
           ganttChart.push({
@@ -142,45 +131,42 @@ function clearTable(users, updateUserState) {
             priority: process.priority
           });
 
+
         }
         
   
         // Check if the process has finished
         if (process.burst <= 0) {
+          untouchedProcesses.find((p) => p.id === process.id).finish = process.finish = currentTime;
           process.completed = true;
           n--;
         }
   
         // Add the process back to the queue if it still has burst time remaining
         if (!process.completed) {
-          queue.push(process);
+          queue2.push(process);
+          
         }
+        
+
       }
 
-      else{
-
-        const allCompleted = processes.every((p) => p.completed);
-        const nextArrival = Math.min(...processes.filter((p) => !p.completed).map((p) => p.arrival));
-        if (nextArrival !== null && !allCompleted && nextArrival > currentTime) {
-          const idleTime = nextArrival - currentTime;
-          if (idleTime > 0) {
-            currentTime += idleTime;
-            ganttChart.push({
-              id: 'idle',
-              start: currentTime - idleTime,
-              finish: currentTime,
-              burst: idleTime,
-              priority: Infinity
-            });
-          }
-        }
-        queue.push(process);
-        currentTime++;
-      }
     }
-  
+    let x = calculateTAT(untouchedProcesses);
+    console.log("tat",x);
+    updateRunningState(true);
     clearTable(processes, updateUserState);
     return ganttChart;
+  }
+
+  
+
+  function calculateTAT(ganttChart){
+    let tat = 0;
+    for (let i = 0; i < ganttChart.length; i++) {
+      tat += ganttChart[i].finish - ganttChart[i].arrival;
+    }
+    return tat;
   }
   
   

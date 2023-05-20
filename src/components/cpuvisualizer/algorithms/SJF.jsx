@@ -18,17 +18,31 @@ function clearTable(users, updateUserState) {
 
   };
 
-  export function sjrfScheduling(users, isRunning, updateUserState) {
+  export function sjrfScheduling(users, isRunning, updateUserState, updateRunningState) {
     console.log("sjrfScheduling called");
     let processes = [...users];
-    console.log("users", users);
+    let untouchedProcesses = [...users];
+    processes = processes.sort((a, b) => a.arrival - b.arrival || a.burst - b.burst);
+    console.log("processes", processes[0]);
     const ganttChart = [];
   
     if (processes[0].arrival !== null || processes[0].burst !== null) {
-      processes.sort((a, b) => a.arrival - b.arrival || a.burst - b.burst);
   
       let currentTime = 0;
       let completedProcesses = 0;
+
+      if(processes[0].arrival!=0){
+        const idleProcess = {
+          id: 'idle',
+          arrival: 0,
+          burst: processes[0].arrival,
+          start: 0,
+          finish: processes[0].arrival,
+          priority: null
+        };
+        currentTime = processes[0].arrival;
+        ganttChart.push(idleProcess);
+      }
   
       while (completedProcesses < processes.length) {
         let nextProcess = null;
@@ -36,9 +50,9 @@ function clearTable(users, updateUserState) {
   
         for (let i = 0; i < processes.length; i++) {
           if (
-            processes[i].arrival <= currentTime &&
-            processes[i].burst < shortestTime &&
-            processes[i].burst > 0
+            +processes[i].arrival <= currentTime &&
+            +processes[i].burst < shortestTime &&
+            +processes[i].burst > 0
           ) {
             nextProcess = processes[i];
             shortestTime = processes[i].burst;
@@ -58,6 +72,11 @@ function clearTable(users, updateUserState) {
         currentTime++;
   
         if (nextProcess.burst === 0) {
+          untouchedProcesses.forEach((process) => {
+            if (process.id === nextProcess.id) {
+              process.finish = currentTime;
+            }
+          });
           completedProcesses++;
         }
       }
@@ -94,6 +113,11 @@ function clearTable(users, updateUserState) {
           }
         }
 
+        console.log("gant", ganttChart);
+
+        let x = calculateTAT(untouchedProcesses);
+        console.log("x", x);
+        updateRunningState(true);
         clearTable(users, updateUserState);
         return ganttChart;
 
@@ -107,7 +131,7 @@ function clearTable(users, updateUserState) {
   }
   
 
-  export function sjf(users, updateUserState) {
+  export function sjf(users, updateUserState, isRunning, updateRunningState) {
     
       var auxillaryArray = users.slice();
       var auxillaryArray2 = users.slice(1);
@@ -220,6 +244,21 @@ function clearTable(users, updateUserState) {
         }
       };
 
-  
+      let x = calculateTAT(auxillaryArray);
+      console.log("x", x);
+      clearTable(users, updateUserState);
+      updateRunningState(true);
+
       return auxillaryArray;
+    }
+
+    function calculateTAT(ganttChart){
+      let tat = 0;
+      for(let i=0; i<ganttChart.length; i++){
+        if(ganttChart[i].id !== 'idle'){
+          tat += +ganttChart[i].finish - +ganttChart[i].arrival;
+        }
+      }
+
+      return tat;
     }

@@ -19,10 +19,12 @@ function clearTable(users, updateUserState) {
   };
 
 
-  export function fcfs(users, updateUserState) {
+  export function fcfs(users, updateUserState, isRunning, updateRunningState) {
     const newClicked = true;
   
     if (newClicked) {
+
+      updateRunningState(false);
       const auxillaryArray = users.slice();
       var timePassed = 0;
 
@@ -109,6 +111,15 @@ function clearTable(users, updateUserState) {
 
         }
 
+        if(index==auxillaryArray.length-1){
+          clearTable(users, updateUserState);
+          let x= calculateTAT(auxillaryArray);
+          console.log("TAT", x);
+          updateRunningState(true);
+          return auxillaryArray;
+
+        }
+
         
         
 
@@ -118,7 +129,19 @@ function clearTable(users, updateUserState) {
 
      
 
-  
+      
       return auxillaryArray;
     }
+  }
+
+
+  function calculateTAT(users){
+    var tat = 0;
+    for(var i = 0; i < users.length; i++){
+      if(users[i].id != 'idle'){
+      tat += users[i].finish - users[i].arrival;
+      }
+    }
+    return tat;
+
   }

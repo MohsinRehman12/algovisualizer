@@ -15,6 +15,8 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
 
     box-shadow: 5px 5px 50px 5px rgba(180, 179, 179, 0.2);
+    z-index: -1;
+
 
 }
 
@@ -26,7 +28,30 @@
     width: 80%;
 
     margin-left: 10%;
+    margin-top: 4em;
+    z-index: -1;
 }
+
+
+
+.testBox.interval{
+    margin-top: 0em;
+}
+
+/* .testBox.false{
+    left: 100%;
+    opacity: 0;
+    visibility: hidden;    
+}
+
+.testBox.true{
+    left: 0%;
+    opacity: 1;
+    transition: 0.3s ease;
+    
+    
+} */
+
 
 
 
@@ -44,17 +69,83 @@
 
 }
 
+
 .finalProcess{
     display: flex;
     
 }
 
+.ptable-header{
+    padding-top: 15px !important;
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
 .processTable{
-    background-color: whitesmoke;
-    border: 1px solid black;
     box-shadow: 5px 5px 50px 5px rgba(255, 255, 255, 0.2);
     width: 80%;
     margin-top: 4em;
     margin-left: 10%;
     margin-right: 10%;
+    margin-bottom: 2.5em;
+    background: rgba(86, 84, 84, 0.38);
+    border-radius: 16px;
+    backdrop-filter: blur(8.9px);
+    -webkit-backdrop-filter: blur(8.9px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: whitesmoke;
+
 }
+
+.table-input3, .table-input2, .table-input1{
+    color: whitesmoke;
+    background-color: rgba(73, 73, 73, 0.1);
+    
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+
+
+@media screen and (max-width: 1235px) {
+
+    .intervalBox{
+        font-size: 1em !important;
+    }
+    
+}
+
+@media screen and (max-width: 975px) {
+
+    .intervalBox{
+        font-size: 0.8em !important;
+    }
+    
+}
+    
+
+@media screen and (max-width: 800px) {
+    .table-input1, .table-input2, .table-input3{
+        width: 80%;
+    }
+
+    .intervalBox{
+        font-size: 0.6em !important;
+    }
+
+    .test{
+        font-size: 1em;
+    }
+    
+}
+
+@media screen and (max-width: 555px) {
+
+    .intervalBox{
+        font-size: 0.5em !important;
+    }
+    
+}
+    

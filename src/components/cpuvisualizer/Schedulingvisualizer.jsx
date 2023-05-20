@@ -38,18 +38,18 @@ function SchedulingVisualizer() {
         return users.map(({id, arrival, burst, priority }) => {
         
           return <tr key={id} >
-          <td style={{ padding: '10px', border: '1px solid white' }}>
+          <td style={{ padding: '10px'}}>
             {id}          
           </td>
-          <td style={{ padding: '10px', border: '1px solid white' }}>
-          <input type='number'
+          <td style={{ padding: '10px' }}>
+          <input type='number' 
             className='table-input1'
             onChange={(e) => setUsers(users.map(user => user.id === id ? {...user, arrival: e.target.value} : user))}
             id='tableInput1'
           ></input> 
 
           </td>
-          <td style={{ padding: '10px', border: '1px solid white' }}>
+          <td style={{ padding: '10px' }}>
           <input type='number'
             onChange={(e) => setUsers(users.map(user => user.id === id ? {...user, burst: e.target.value} : user))}
             id='tableInput2'
@@ -59,7 +59,7 @@ function SchedulingVisualizer() {
           ></input> 
 
           </td>
-          <td style={{ padding: '10px', border: '1px solid white' }}>
+          <td style={{ padding: '10px' }}>
           <input type='number'
             onChange={(e) => setUsers(users.map(user => user.id === id ? {...user, priority: e.target.value} : user))}
             id='tableInput3'
@@ -74,7 +74,7 @@ function SchedulingVisualizer() {
 
       const renderHeader = () => {
         return <tr>
-          {Object.keys(INITIAL_STATE[0]).map(key => <th>{key}</th>)}
+          {Object.keys(INITIAL_STATE[0]).map(key => <th className='ptable-header'>{key}</th>)}
         </tr>
       }
 
@@ -105,7 +105,9 @@ function SchedulingVisualizer() {
 
 
     function fcfs() {
-      setArray2(FCFS.fcfs(users, updateUserState));
+      
+      setArray2(FCFS.fcfs(users, updateUserState, isRunning, updateRunningState));
+
       
     }
     
@@ -113,7 +115,8 @@ function SchedulingVisualizer() {
 
 
     function sjf(){
-      setArray2(SJF.sjf(users, updateUserState));
+      setIsRunning(false);
+      setArray2(SJF.sjf(users, updateUserState, isRunning, updateRunningState));
     }
 
     
@@ -123,14 +126,15 @@ function SchedulingVisualizer() {
     
 
     function sjrfScheduling() {
-      setArray2(SJF.sjrfScheduling(users, isRunning, updateUserState));
+      setIsRunning(false);
+      setArray2(SJF.sjrfScheduling(users, isRunning, updateUserState, updateRunningState));
 
       
     }
 
     function roundRobinScheduling() {
-
-    setArray2(RR.roundRobinScheduling(users, 3, updateUserState));
+    setIsRunning(false);
+    setArray2(RR.roundRobinScheduling(users, 3, updateUserState, isRunning, updateRunningState));
     }
 
     
@@ -167,7 +171,24 @@ function SchedulingVisualizer() {
           return false;
         }
       }
-      return true;  
+
+      let isNeg = isTableNegative();
+      return isNeg;  
+    }
+
+    function isTableNegative() {
+      const inputs = document.getElementsByClassName('table-input1');
+      const inputs2 = document.getElementsByClassName('table-input2');
+      const inputs3 = document.getElementsByClassName('table-input3');
+
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value < 0 || inputs2[i].value < 0 || inputs3[i].value < 0
+          || inputs[i].value === '0' || inputs2[i].value === '0' || inputs3[i].value === '0') {
+           
+          return false;
+        }
+      }
+      return true;
     }
 
     useEffect(() => {
@@ -202,12 +223,61 @@ function SchedulingVisualizer() {
   
     return (
       <>
-      <div className="testBox">
+      <div className={`coverDiv ${isRunning}`}>
+
+      
+      <div className={`testBox ${isRunning}`}>
         {arrayA.map((process, index) => (
           <div
             key={index}
-            className="test"
-            style={{ flex: `${process.burst} 0 0`, backgroundColor: `${process.color}`}}
+            className={`test`}
+
+            style={isRunning?
+              { 
+                opacity: '1',
+                flex: 
+                `${process.burst} 0 0`, 
+                backgroundColor: `${process.color}`, 
+                boxShadow: `5px 5px 50px 5px ${process.color}`, 
+                transform: `translateX(0)`,
+                color: 'white',
+                display: 'flex',
+                textAlign: 'center',
+                justifyContent: 'center',
+                borderRadius: '16px',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                height:'60px',
+                alignItems: 'center',
+                opacity: '1',
+                visibility: 'visible',
+                transition: `${process.start*1000}ms`,
+                animation: `${process.start*1000}ms ease-in-out 0s 1 slideInFromLeft`,
+              
+              }
+              : 
+              { 
+                flex: 
+                `${process.burst} 0 0`, 
+                backgroundColor: `${process.color}`, 
+                boxShadow: `5px 5px 50px 5px ${process.color}`, 
+                transform: `translateX(0)`,
+                color: 'white',
+                display: 'flex',
+                textAlign: 'center',
+                justifyContent: 'center',
+                borderRadius: '16px',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                height:'60px',
+                alignItems: 'center',
+                opacity: '0',
+                visibility: 'hidden',
+                transition: `${process.start*10}ms ease-in-out 0s 1 slideInFromLeft`,
+
+              
+               }
+            }
           >
             {process.id}
             
@@ -217,7 +287,7 @@ function SchedulingVisualizer() {
         ))}
     </div>
 
-    <div className="testBox">
+    <div className="testBox interval">
       {arrayA.map((process, index) => (
 
           <div
@@ -225,16 +295,17 @@ function SchedulingVisualizer() {
             className="intervalBox"
             style={{ flex: `${process.burst} 0 0` }}
           >
-            <p>
+            <p className='timeText'>
               {process.start}
             </p>
 
-            <p>
+            <p className='timeText'>
             {process.last ? process.finish : null}
             </p>
           </div>
           
         ))}
+    </div>
     </div>
     </>
   )
@@ -254,6 +325,8 @@ function SchedulingVisualizer() {
 
   return (
     <>
+
+    <h1 className='headerText'> CPU Scheduling Visualizer </h1>
     {renderTable()}
 
     <button className='bar-button' onClick={addRow}> + </button>
@@ -261,7 +334,7 @@ function SchedulingVisualizer() {
     <button className='bar-button' onClick={fcfs} disabled={isEmptied}> FCFS </button>
     <button className='bar-button' onClick={sjf} disabled={isEmptied}> SJF </button>
     <button className='bar-button' onClick={sjrfScheduling} disabled={isEmptied}> SJF Preempting </button>
-    <button className='bar-button' onClick={priorityScheduling} disabled={isEmptied}> Priority </button>
+    <button className='bar-button' onClick={priorityScheduling} disabled={isEmptied}> Priority Preempting</button>
     <button className='bar-button' onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
     <button className='bar-button' onClick={clearTable}> Reset State </button>
 
