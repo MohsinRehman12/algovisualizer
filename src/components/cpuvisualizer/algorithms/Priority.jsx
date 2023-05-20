@@ -4,7 +4,7 @@ const INITIAL_STATE = [
 
 
 ]
-function clearTable(users, updateUserState) {
+function clearTable(users, updateUserState, isRunning, updateRunningState) {
     updateUserState(INITIAL_STATE);
     const input1 = document.getElementsByClassName("table-input1")
     const input2 = document.getElementsByClassName("table-input2")

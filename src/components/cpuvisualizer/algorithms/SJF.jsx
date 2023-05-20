@@ -4,6 +4,13 @@ const INITIAL_STATE = [
 
 
 ]
+
+const INITIAL_INFO_STATE = [
+  {id:'P0', arrival: null, burst: null, priority: null, finish: null, waitingTime: null, turnaroundTime: null},
+  {id:'P1', arrival: null, burst: null, priority: null, finish: null, waitingTime: null, turnaroundTime: null}
+]
+var localArray = [];
+
 function clearTable(users, updateUserState) {
     updateUserState(INITIAL_STATE);
     const input1 = document.getElementsByClassName("table-input1")
@@ -19,11 +26,11 @@ function clearTable(users, updateUserState) {
   };
 
   export function sjrfScheduling(users, isRunning, updateUserState, updateRunningState) {
-    console.log("sjrfScheduling called");
+    localArray = [];
+    var initialBurstTimes = users.map((process) => process.burst);
     let processes = [...users];
     let untouchedProcesses = [...users];
     processes = processes.sort((a, b) => a.arrival - b.arrival || a.burst - b.burst);
-    console.log("processes", processes[0]);
     const ganttChart = [];
   
     if (processes[0].arrival !== null || processes[0].burst !== null) {
@@ -113,10 +120,8 @@ function clearTable(users, updateUserState) {
           }
         }
 
-        console.log("gant", ganttChart);
 
-        let x = calculateTAT(untouchedProcesses);
-        console.log("x", x);
+        calculateInfo(untouchedProcesses, initialBurstTimes);
         updateRunningState(true);
         clearTable(users, updateUserState);
         return ganttChart;
@@ -132,11 +137,11 @@ function clearTable(users, updateUserState) {
   
 
   export function sjf(users, updateUserState, isRunning, updateRunningState) {
-    
+      localArray = [];
+
       var auxillaryArray = users.slice();
       var auxillaryArray2 = users.slice(1);
       
-      auxillaryArray.sort((a, b) => a.arrival - b.arrival);
 
       auxillaryArray.sort((a, b) => a.arrival - b.arrival);
       var auxillaryArray3 = auxillaryArray.slice(0, 1);
@@ -244,8 +249,8 @@ function clearTable(users, updateUserState) {
         }
       };
 
-      let x = calculateTAT(auxillaryArray);
-      console.log("x", x);
+      var initialBurstTimes = auxillaryArray.map((process) => process.burst);
+      calculateInfo(auxillaryArray, initialBurstTimes);
       clearTable(users, updateUserState);
       updateRunningState(true);
 
@@ -261,4 +266,38 @@ function clearTable(users, updateUserState) {
       }
 
       return tat;
+    }
+
+    function calculateInfo(ganttChart, burstTimes){
+      let totalTat = 0;
+      let totalWt = 0;
+      let j=0;
+
+      for (let i = 0; i < ganttChart.length; i++) {
+        if(ganttChart[i].id !== 'idle'){
+        ganttChart[i].tat = +(ganttChart[i].finish) - +(ganttChart[i].arrival);
+        totalTat += ganttChart[i].tat;
+        ganttChart[i].burst = +burstTimes[i];
+        console.log("burst", burstTimes[i])
+        ganttChart[i].wt = (ganttChart[i].tat) - +(ganttChart[i].burst);
+        totalWt += ganttChart[i].wt;
+        j++;
+        
+  
+        localArray.push(ganttChart[i]);
+        }
+      }
+  
+      const avgTat =  totalTat / j;
+      const avgWt = totalWt /j;
+  
+      localArray.push({id: "Total", tat: totalTat, wt: totalWt})
+      localArray.push({id: "Avg", tat: avgTat, wt: avgWt})
+  
+      console.log("localArray", localArray);
+    }
+  
+  
+    export function getLocalArray(){
+      return localArray;
     }

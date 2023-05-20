@@ -13,7 +13,7 @@ function SchedulingVisualizer() {
     const [order, setOrder] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
     const [isEmptied, setIsEmptied] = useState(true);
-    const [timeIntervals, setTimeIntervals] = useState([]);
+    const [infoArray, setInfoArray] = useState([]);
 
 
 
@@ -22,6 +22,11 @@ function SchedulingVisualizer() {
         {id:'P1', arrival: null, burst: null, priority: null} 
  
 
+    ]
+
+    const INITIAL_INFO_STATE = [
+        {id:'P0', arrival: null, burst: null, priority: null, finish: null, waitingTime: null, turnaroundTime: null},
+        {id:'P1', arrival: null, burst: null, priority: null, finish: null, waitingTime: null, turnaroundTime: null}
     ]
 
     const [users, setUsers] = useState(INITIAL_STATE);
@@ -33,6 +38,36 @@ function SchedulingVisualizer() {
     const updateRunningState = (newRunningState) => {
         setIsRunning(newRunningState);
     };
+
+    const renderInfo = () => {
+        return infoArray.map(({id, arrival, burst, priority, start, finish, wt, tat }) => {
+
+            return <tr key={id} >
+            <td style={{ padding: '10px'}}>
+              {id}
+            </td>
+            <td style={{ padding: '10px' }}>
+              {arrival}
+            </td>
+            <td style={{ padding: '10px' }}>
+              {burst}
+            </td>
+            <td style={{ padding: '10px' }}>
+              {priority? priority : "N/A"}
+            </td>
+            
+            <td style={{ padding: '10px' }}>
+              {finish}
+            </td>
+            <td style={{ padding: '10px' }}>
+              {wt}
+            </td>
+            <td style={{ padding: '10px' }}>
+              {tat}
+            </td>
+          </tr>
+          })
+        }
 
     const renderUsers = () => {
         return users.map(({id, arrival, burst, priority }) => {
@@ -78,6 +113,23 @@ function SchedulingVisualizer() {
         </tr>
       }
 
+      const renderInfoHeader = () => {
+        return <tr>
+          {Object.keys(INITIAL_INFO_STATE[0]).map(key => <th className='ptable-header'>{key}</th>)}
+        </tr>
+      }
+
+      const renderInfoTable = () => {
+        return (
+          <table className='processTable'>
+            {renderInfoHeader()}
+            <tbody>
+              {renderInfo()}
+            </tbody>
+          </table>
+        )
+      }
+
       const renderTable = () => {
         return (
           <table className='processTable'>
@@ -105,8 +157,10 @@ function SchedulingVisualizer() {
 
 
     function fcfs() {
-      
+      setIsRunning(false);
+      setInfoArray([]);
       setArray2(FCFS.fcfs(users, updateUserState, isRunning, updateRunningState));
+      setInfoArray(FCFS.getLocalArray());
 
       
     }
@@ -116,7 +170,9 @@ function SchedulingVisualizer() {
 
     function sjf(){
       setIsRunning(false);
+
       setArray2(SJF.sjf(users, updateUserState, isRunning, updateRunningState));
+      setInfoArray(SJF.getLocalArray());
     }
 
     
@@ -127,21 +183,21 @@ function SchedulingVisualizer() {
 
     function sjrfScheduling() {
       setIsRunning(false);
+      setInfoArray([]);
       setArray2(SJF.sjrfScheduling(users, isRunning, updateUserState, updateRunningState));
+      setInfoArray(SJF.getLocalArray());
 
       
     }
 
     function roundRobinScheduling() {
     setIsRunning(false);
+    setInfoArray([]);
     setArray2(RR.roundRobinScheduling(users, 3, updateUserState, isRunning, updateRunningState));
+    setInfoArray(RR.getLocalArray());
     }
 
     
-
-    useEffect(() => {
-      console.log("running", isRunning);
-    }, [isRunning]);
 
     const clearTable = () => {
       setUsers(INITIAL_STATE);
@@ -155,6 +211,10 @@ function SchedulingVisualizer() {
         input3[i].value = "";
       }
 
+    };
+
+    const clearInfoTable = () => {
+      setInfoArray(INITIAL_INFO_STATE);
     };
     
     
@@ -251,8 +311,8 @@ function SchedulingVisualizer() {
                 alignItems: 'center',
                 opacity: '1',
                 visibility: 'visible',
-                transition: `${process.start*1000}ms`,
-                animation: `${process.start*1000}ms ease-in-out 0s 1 slideInFromLeft`,
+                transition: `${process.start*100}ms`,
+                animation: `${process.start*100}ms ease-in-out 0s 1 slideInFromLeft`,
               
               }
               : 
@@ -337,8 +397,10 @@ function SchedulingVisualizer() {
     <button className='bar-button' onClick={priorityScheduling} disabled={isEmptied}> Priority Preempting</button>
     <button className='bar-button' onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
     <button className='bar-button' onClick={clearTable}> Reset State </button>
+    <button className='bar-button' onClick={clearInfoTable}> Clear Info </button>
 
     {array2 && ReturnArray(array2)}
+    {infoArray && renderInfoTable(infoArray)}
 
 
     

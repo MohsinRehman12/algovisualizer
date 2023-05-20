@@ -4,6 +4,9 @@ const INITIAL_STATE = [
 
 
 ]
+
+const localArray = [];
+
 function clearTable(users, updateUserState) {
     updateUserState(INITIAL_STATE);
     const input1 = document.getElementsByClassName("table-input1")
@@ -25,8 +28,10 @@ function clearTable(users, updateUserState) {
   
   export function roundRobinScheduling(processes, timeQuantum, updateUserState, isRunning, updateRunningState) {
     let n = processes.length;
-    const untouchedProcesses = [...processes];
-    const queue = [...processes];
+    const initialBurstTimes = processes.map((p) => p.burst);
+    console.log("initialBurstTimes", initialBurstTimes);
+    const untouchedProcesses = processes.slice();
+    const queue = processes.slice();
     const ganttChart = [];
     let currentTime = 0;
     let process = null;
@@ -38,8 +43,6 @@ function clearTable(users, updateUserState) {
       process = queue2.shift();
 
 
-      console.log("process", process);
-      console.log("currentTime", currentTime);
 
       
 
@@ -55,7 +58,6 @@ function clearTable(users, updateUserState) {
             queue.forEach((p) => {
               if (p.arrival <= currentTime && !p.completed) {
                 queue2.push(p);
-                console.log("queue", p);
               }
             });
 
@@ -97,7 +99,6 @@ function clearTable(users, updateUserState) {
             }
             if(check && queue[i].id!=process.id){
               queue2.push(queue[i]);
-              console.log("queue", queue[i], currentTime);
 
             }
         }
@@ -118,6 +119,8 @@ function clearTable(users, updateUserState) {
             last : true,
           });
 
+          
+
 
 
         }
@@ -130,6 +133,7 @@ function clearTable(users, updateUserState) {
             burst: executionTime,
             priority: process.priority
           });
+          
 
 
         }
@@ -152,21 +156,41 @@ function clearTable(users, updateUserState) {
       }
 
     }
-    let x = calculateTAT(untouchedProcesses);
-    console.log("tat",x);
     updateRunningState(true);
+    calculateInfo(untouchedProcesses, initialBurstTimes);
     clearTable(processes, updateUserState);
     return ganttChart;
   }
 
   
 
-  function calculateTAT(ganttChart){
-    let tat = 0;
+  function calculateInfo(ganttChart, burstTimes){
+    let totalTat = 0;
+    let totalWt = 0;
     for (let i = 0; i < ganttChart.length; i++) {
-      tat += ganttChart[i].finish - ganttChart[i].arrival;
+      ganttChart[i].tat = +(ganttChart[i].finish) - +(ganttChart[i].arrival);
+      totalTat += ganttChart[i].tat;
+      ganttChart[i].burst = +burstTimes[i];
+      console.log("burst", burstTimes[i])
+      ganttChart[i].wt = (ganttChart[i].tat) - +(ganttChart[i].burst);
+      totalWt += ganttChart[i].wt;
+      
+
+      localArray.push(ganttChart[i]);
     }
-    return tat;
+
+    const avgTat =  totalTat / ganttChart.length;
+    const avgWt = totalWt / ganttChart.length;
+
+    localArray.push({id: "Total", tat: totalTat, wt: totalWt})
+    localArray.push({id: "Avg", tat: avgTat, wt: avgWt})
+
+    console.log("localArray", localArray);
+  }
+
+
+  export function getLocalArray(){
+    return localArray;
   }
   
   

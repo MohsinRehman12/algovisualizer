@@ -4,6 +4,13 @@ const INITIAL_STATE = [
 
 
 ]
+
+const INITIAL_INFO_STATE = [
+  {id:'P0', arrival: null, burst: null, priority: null, finish: null, waitingTime: null, turnaroundTime: null},
+  {id:'P1', arrival: null, burst: null, priority: null, finish: null, waitingTime: null, turnaroundTime: null}
+]
+var localArray = [];
+
 function clearTable(users, updateUserState) {
     updateUserState(INITIAL_STATE);
     const input1 = document.getElementsByClassName("table-input1")
@@ -20,6 +27,8 @@ function clearTable(users, updateUserState) {
 
 
   export function fcfs(users, updateUserState, isRunning, updateRunningState) {
+    localArray = [];
+    var initialBurstTimes = users.map((process) => process.burst);
     const newClicked = true;
   
     if (newClicked) {
@@ -113,8 +122,7 @@ function clearTable(users, updateUserState) {
 
         if(index==auxillaryArray.length-1){
           clearTable(users, updateUserState);
-          let x= calculateTAT(auxillaryArray);
-          console.log("TAT", x);
+          calculateInfo(auxillaryArray, initialBurstTimes);
           updateRunningState(true);
           return auxillaryArray;
 
@@ -144,4 +152,37 @@ function clearTable(users, updateUserState) {
     }
     return tat;
 
+  }
+
+  function calculateInfo(ganttChart, burstTimes){
+    let totalTat = 0;
+    let totalWt = 0;
+    let j=0;
+    for (let i = 0; i < ganttChart.length; i++) {
+      if(ganttChart[i].id != 'idle'){
+      ganttChart[i].tat = +(ganttChart[i].finish) - +(ganttChart[i].arrival);
+      totalTat += ganttChart[i].tat;
+      ganttChart[i].burst = +burstTimes[j];
+      console.log("burst", burstTimes[j])
+      ganttChart[i].wt = (ganttChart[i].tat) - +(ganttChart[i].burst);
+      totalWt += ganttChart[i].wt;
+      j++;
+      
+
+      localArray.push(ganttChart[i]);
+      }
+    }
+
+    const avgTat =  totalTat / burstTimes.length;
+    const avgWt = totalWt / burstTimes.length;
+
+    localArray.push({id: "Total", tat: totalTat, wt: totalWt})
+    localArray.push({id: "Avg", tat: avgTat, wt: avgWt})
+
+    console.log("localArray", localArray);
+  }
+
+
+  export function getLocalArray(){
+    return localArray;
   }
