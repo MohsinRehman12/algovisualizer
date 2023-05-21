@@ -176,8 +176,12 @@ function clearTable(users, updateUserState) {
     const avgTat =  totalTat / burstTimes.length;
     const avgWt = totalWt / burstTimes.length;
 
-    localArray.push({id: "Total", tat: totalTat, wt: totalWt})
-    localArray.push({id: "Avg", tat: avgTat, wt: avgWt})
+    let avgTatRounded = Math.round(avgTat * 100.0) / 100.0;
+    let avgWtRounded = Math.round(avgWt * 100.0) / 100.0;
+
+
+    localArray.push({id: "Total", tat: totalTat, wt: totalWt, priority: " "})
+    localArray.push({id: "Avg", tat: avgTatRounded, wt: avgWtRounded, priority: " "})
 
     console.log("localArray", localArray);
   }

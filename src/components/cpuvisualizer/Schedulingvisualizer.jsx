@@ -197,6 +197,14 @@ function SchedulingVisualizer() {
     setInfoArray(RR.getLocalArray());
     }
 
+    function priorityScheduling(){
+      setIsRunning(false);
+      setInfoArray([]);
+      setArray2(PriorityAlgoritms.priorityScheduling(users, isRunning, updateUserState, updateRunningState));
+      setInfoArray(PriorityAlgoritms.getLocalArray());
+  
+    }
+
     
 
     const clearTable = () => {
@@ -374,10 +382,7 @@ function SchedulingVisualizer() {
 };
 
  
-  function priorityScheduling(){
-    
-    setArray2(PriorityAlgoritms.priorityScheduling(users, isRunning, updateUserState));
-  }
+  
   
 
   

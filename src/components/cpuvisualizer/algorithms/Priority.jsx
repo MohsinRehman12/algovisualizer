@@ -4,6 +4,9 @@ const INITIAL_STATE = [
 
 
 ]
+
+let localArray = [];
+
 function clearTable(users, updateUserState, isRunning, updateRunningState) {
     updateUserState(INITIAL_STATE);
     const input1 = document.getElementsByClassName("table-input1")
@@ -18,97 +21,152 @@ function clearTable(users, updateUserState, isRunning, updateRunningState) {
 
   };
 
-export function priorityScheduling(users, isRunning, updateUserState) {
-    isRunning=true;
-    console.log("priorityScheduling called");
+
+
+  function calculateInfo(ganttChart, burstTimes){
+    let totalTat = 0;
+    let totalWt = 0;
+    let j = 0;
+    for (let i = 0; i < ganttChart.length; i++) {
+      if(ganttChart[i].id !== "idle"){
+      ganttChart[i].tat = +(ganttChart[i].finish) - +(ganttChart[i].arrival);
+      totalTat += ganttChart[i].tat;
+      ganttChart[i].burst = +burstTimes[j];
+      console.log("burst", burstTimes[j])
+      ganttChart[i].wt = (ganttChart[i].tat) - +(ganttChart[i].burst);
+      totalWt += ganttChart[i].wt;
+      
+
+      localArray.push(ganttChart[i]);
+      j++;
+      }
+    }
+
+    const avgTat =  totalTat / j;
+    const avgWt = totalWt / j;
+    let avgTatRounded = Math.round(avgTat * 100.0) / 100.0;
+    let avgWtRounded = Math.round(avgWt * 100.0) / 100.0;
+
+
+    localArray.push({id: "Total", tat: totalTat, wt: totalWt, priority: " "})
+    localArray.push({id: "Avg", tat: avgTatRounded, wt: avgWtRounded, priority: " "})
+
+    console.log("localArray", localArray);
+  }
+
+
+  export function getLocalArray(){
+    return localArray;
+  }
+
+
+  export function priorityScheduling(users, isRunning, updateUserState, updateRunningState) {
+    localArray = [];
+    var initialBurstTimes = users.map((process) => process.burst);
     let processes = [...users];
-    console.log("users", users);
+    let untouchedProcesses = [...users];
+    processes = processes.sort((a, b) => a.arrival - b.arrival || a.burst - b.burst);
     const ganttChart = [];
-    const combinedProcesses = {};
   
-    if (processes[0].arrival !== null || processes[0].burst !== null || processes[0].priority !== null) {
-      processes.sort((a, b) => a.arrival - b.arrival || a.priority - b.priority);
+    if (processes[0].arrival !== null || processes[0].burst !== null) {
   
       let currentTime = 0;
       let completedProcesses = 0;
+
+      if(processes[0].arrival!=0){
+        const idleProcess = {
+          id: 'idle',
+          arrival: 0,
+          burst: processes[0].arrival,
+          start: 0,
+          finish: processes[0].arrival,
+          priority: null
+        };
+        currentTime = processes[0].arrival;
+        ganttChart.push(idleProcess);
+      }
   
       while (completedProcesses < processes.length) {
         let nextProcess = null;
-        let highestPriority = Infinity;
+        let lowestPriority = Infinity;
   
         for (let i = 0; i < processes.length; i++) {
           if (
-            processes[i].arrival <= currentTime &&
-            processes[i].priority < highestPriority &&
-            processes[i].burst > 0
+            +processes[i].arrival <= currentTime &&
+            +processes[i].priority < lowestPriority &&
+            +processes[i].burst > 0
           ) {
             nextProcess = processes[i];
-            highestPriority = processes[i].priority;
+            lowestPriority = processes[i].priority;
           }
         }
   
         if (nextProcess === null) {
-          ganttChart.push({ id: "idle", arrival: currentTime, burst: 1, start: currentTime, finish: currentTime, priority: Infinity });
+          ganttChart.push({ id: "idle", arrival: currentTime, burst: 1, start: currentTime, finish: currentTime });
           currentTime++;
+
           continue;
         }
   
-        // Combine processes with the same PID
-        if (combinedProcesses[nextProcess.id]) {
-          combinedProcesses[nextProcess.id].burst += nextProcess.burst;
-        } else {
-          combinedProcesses[nextProcess.id] = { ...nextProcess };
-        }
-  
-        ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1, start: currentTime, finish: currentTime, priority: nextProcess.priority });
+        ganttChart.push({ id: nextProcess.id, arrival: currentTime, burst: 1, start: currentTime, finish: currentTime });
   
         nextProcess.burst--;
         currentTime++;
   
         if (nextProcess.burst === 0) {
+          untouchedProcesses.forEach((process) => {
+            if (process.id === nextProcess.id) {
+              process.finish = currentTime;
+            }
+          });
           completedProcesses++;
         }
       }
-  
-      // Convert combined processes back to an array
-  
-      if (completedProcesses === processes.length) {
+
+      if(completedProcesses === processes.length){
         
         for(let i=0; i<ganttChart.length; i++){
-            let k=0;
-            if(i<ganttChart.length-1){
-  
-              if(ganttChart[i].id === ganttChart[i+1].id){
-                for(let j=i+1; j<ganttChart.length; j++){
-                  if(ganttChart[j].id === ganttChart[i].id){
-                    k++;
-                    ganttChart[i].burst = ganttChart[i].burst + ganttChart[j].burst;
+          let k=0;
+          if(i<ganttChart.length-1){
 
-  
-                  }
-                  else{
-                    break;
-                  }
+            if(ganttChart[i].id === ganttChart[i+1].id){
+              for(let j=i+1; j<ganttChart.length; j++){
+                if(ganttChart[j].id === ganttChart[i].id){
+                  k++;
+                  ganttChart[i].burst = ganttChart[i].burst + ganttChart[j].burst;
+
                 }
-
-                ganttChart[i].finish = ganttChart[i].finish + ganttChart[i].burst;
-                ganttChart.splice(i+1, k);
-  
+                else{
+                  break;
+                }
               }
-            }
 
-            if(i===ganttChart.length-1){
-          
-              ganttChart[i].last = true;
+              ganttChart[i].finish = ganttChart[i].finish + ganttChart[i].burst;
+              
+
+              ganttChart.splice(i+1, k);
+
             }
           }
-        isRunning=false;
+
+          if(i===ganttChart.length-1){
+          
+            ganttChart[i].last = true;
+          }
+        }
+
+
+        calculateInfo(untouchedProcesses, initialBurstTimes);
+        updateRunningState(true);
         clearTable(users, updateUserState);
         return ganttChart;
-        
+
       }
+     
     }
-  }
 
   
+
+    
+  }
   

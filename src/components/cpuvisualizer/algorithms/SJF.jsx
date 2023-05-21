@@ -134,139 +134,129 @@ function clearTable(users, updateUserState) {
 
     
   }
-  
+
 
   export function sjf(users, updateUserState, isRunning, updateRunningState) {
-      localArray = [];
 
-      var auxillaryArray = users.slice();
-      var auxillaryArray2 = users.slice(1);
-      
+    localArray = [];
+    let initialBurstTimes = users.map((process) => process.burst);
 
-      auxillaryArray.sort((a, b) => a.arrival - b.arrival);
-      var auxillaryArray3 = auxillaryArray.slice(0, 1);
-      auxillaryArray2.sort((a, b) => a.burst - b.burst);
+    var auxillaryArray = users.slice();
+    auxillaryArray = auxillaryArray.filter((process) => process.arrival !== null || process.burst !== null);
+    auxillaryArray = auxillaryArray.sort((a, b) => a.arrival - b.arrival || a.burst - b.burst);
+    console.log("auxillaryArray", auxillaryArray);
+    let timePassed = 0;
 
-      if(+auxillaryArray3[0].arrival >= +auxillaryArray2[0].arrival){
-        if(+auxillaryArray3[0].burst > +auxillaryArray2[0].burst){
-          auxillaryArray3.unshift(auxillaryArray2[0]);
-          auxillaryArray2.splice(0, 1);
+    for(var index = 0; index < auxillaryArray.length; index++) {
+      let process = auxillaryArray[index];
+      if(index==0 && process.arrival==0){
+        const processTemp ={
+          id: process.id,
+          arrival: process.arrival,
+          burst: process.burst,
+          start: +process.arrival,
+          finish: +process.burst,
         }
+
+        auxillaryArray.splice(index, 1, processTemp);
+      
       }
 
-  
-      auxillaryArray = auxillaryArray3.concat(auxillaryArray2);
-      auxillaryArray = auxillaryArray.filter((process) => process.arrival !== null || process.burst !== null);
-      console.log("auxillaryArray", auxillaryArray);
-      let currentTime = 0;
-      
-      
-      for(var index = 0; index < auxillaryArray.length; index++) {
-        let process = auxillaryArray[index];
-        if(index==0 && process.arrival==0){                
+      if(index==0 && process.arrival!=0){
+        const idleProcess = {
+          id: 'idle',
+          arrival: 0,
+          burst: process.arrival,
+          start: 0,
+          finish: process.arrival,
+          priority: null
+        };
+        auxillaryArray.unshift(idleProcess);
+      }
+
+      if (index > 0) {
+        const previousProcess = auxillaryArray[index - 1];
+        console.log("previousProcess", previousProcess);
+        const processTime = +previousProcess.arrival + +previousProcess.burst;
+        var initialArrival = +auxillaryArray[0].arrival;
+        timePassed += +previousProcess.burst ;
+        const idleTime = +process.arrival - (timePassed + initialArrival);
+        console.log(processTime, previousProcess.arrival, previousProcess.burst);
+        if (idleTime > 0) {
+          const idleProcess = {
+            id: 'idle',
+            arrival: timePassed + initialArrival,
+            burst: idleTime,
+            start: +timePassed + +initialArrival,
+            finish: +timePassed + +initialArrival + +idleTime,
+            priority: null
+          };
+          auxillaryArray.splice(index, 0, idleProcess);
+        }
+        else{
+          
+
+          if(index == auxillaryArray.length-1){
+            
             const processTemp ={
               id: process.id,
               arrival: process.arrival,
               burst: process.burst,
-              start: +process.arrival,
-              finish: +process.burst,
+              start: +timePassed + +initialArrival,
+              finish: +timePassed + +initialArrival + +process.burst,
+              last: true
             }
 
             auxillaryArray.splice(index, 1, processTemp);
           
           }
-
-          if(index==0 && process.arrival!=0){
-            const idleProcess = {
-              id: 'idle',
-              arrival: 0,
-              burst: process.arrival,
-              start: 0,
-              finish: process.arrival,
-              priority: null
-            };
-            auxillaryArray.unshift(idleProcess);
-        }
-        if (index > 0) {
-
-
-          var initialArrival = +auxillaryArray[0].arrival;
-          currentTime += +auxillaryArray[index - 1].burst;
-
-          const idleTime = +process.arrival - (currentTime + initialArrival);
-          if(index==0 && process.arrival!=0){
-            const idleProcess = {
-              id: 'idle',
-              arrival: 0,
-              burst: process.arrival,
-              start: 0,
-              finish: process.arrival,
-              priority: null
-            };
-            auxillaryArray.unshift(idleProcess);
-          }
-        
-          if (idleTime > 0) {
-            const idleProcess = {
-              id: 'idle',
-              arrival: currentTime + initialArrival,
-              burst: idleTime,
-              start: currentTime + initialArrival,
-              finish: currentTime + initialArrival + idleTime,
-              priority: null
-            };
-            auxillaryArray.splice(index, 0, idleProcess);
-          }
           else{
-
-            if(index == auxillaryArray.length-1){
-              
-              const processTemp ={
-                id: process.id,
-                arrival: process.arrival,
-                burst: process.burst,
-                start: +currentTime + +initialArrival,
-                finish: +currentTime + +initialArrival + +process.burst,
-                last: true
-              }
-
-              auxillaryArray.splice(index, 1, processTemp);
-            
+            const processTemp ={
+              id: process.id,
+              arrival: process.arrival,
+              burst: process.burst,
+              start: +timePassed + +initialArrival,
+              finish: +timePassed + +initialArrival + +process.burst,
             }
-            else{
-              const processTemp ={
-                id: process.id,
-                arrival: process.arrival,
-                burst: process.burst,
-                start: +currentTime + +initialArrival,
-                finish: +currentTime + +initialArrival + +process.burst,
-              }
-              auxillaryArray.splice(index, 1, processTemp);
+            auxillaryArray.splice(index, 1, processTemp);
 
-            }
           }
-          
         }
-      };
 
-      var initialBurstTimes = auxillaryArray.map((process) => process.burst);
-      calculateInfo(auxillaryArray, initialBurstTimes);
-      clearTable(users, updateUserState);
-      updateRunningState(true);
+      
+      if(index==0 && process.arrival==0){                
+          const processTemp ={
+            id: process.id,
+            arrival: process.arrival,
+            burst: process.burst,
+            start: +process.arrival,
+            finish: +process.burst,
+          }
 
-      return auxillaryArray;
-    }
-
-    function calculateTAT(ganttChart){
-      let tat = 0;
-      for(let i=0; i<ganttChart.length; i++){
-        if(ganttChart[i].id !== 'idle'){
-          tat += +ganttChart[i].finish - +ganttChart[i].arrival;
+          auxillaryArray.splice(index, 1, processTemp);
+        
         }
+
       }
 
-      return tat;
-    }
+      if(index==auxillaryArray.length-1){
+        clearTable(users, updateUserState);
+        calculateInfo(auxillaryArray, initialBurstTimes);
+        updateRunningState(true);
+        return auxillaryArray;
+
+      }
+
+      
+      
+
+    };
+
+    
+    return auxillaryArray;
+  }
+
+    
 
     function calculateInfo(ganttChart, burstTimes){
       let totalTat = 0;
@@ -277,8 +267,8 @@ function clearTable(users, updateUserState) {
         if(ganttChart[i].id !== 'idle'){
         ganttChart[i].tat = +(ganttChart[i].finish) - +(ganttChart[i].arrival);
         totalTat += ganttChart[i].tat;
-        ganttChart[i].burst = +burstTimes[i];
-        console.log("burst", burstTimes[i])
+        ganttChart[i].burst = +burstTimes[j];
+        console.log("burst", burstTimes[j])
         ganttChart[i].wt = (ganttChart[i].tat) - +(ganttChart[i].burst);
         totalWt += ganttChart[i].wt;
         j++;
@@ -290,9 +280,12 @@ function clearTable(users, updateUserState) {
   
       const avgTat =  totalTat / j;
       const avgWt = totalWt /j;
+      let avgTatRounded = Math.round(avgTat * 100.0) / 100.0;
+      let avgWtRounded = Math.round(avgWt * 100.0) / 100.0;
   
-      localArray.push({id: "Total", tat: totalTat, wt: totalWt})
-      localArray.push({id: "Avg", tat: avgTat, wt: avgWt})
+  
+      localArray.push({id: "Total", tat: totalTat, wt: totalWt, priority: " "})
+      localArray.push({id: "Avg", tat: avgTatRounded, wt: avgWtRounded, priority: " "})
   
       console.log("localArray", localArray);
     }
