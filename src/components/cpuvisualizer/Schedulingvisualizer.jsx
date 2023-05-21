@@ -42,27 +42,27 @@ function SchedulingVisualizer() {
     const renderInfo = () => {
         return infoArray.map(({id, arrival, burst, priority, start, finish, wt, tat }) => {
 
-            return <tr key={id} >
-            <td style={{ padding: '10px'}}>
+            return <tr key={id} className='info-table-header' >
+            <td className='info-table-text' style={{ padding: '10px'}}>
               {id}
             </td>
-            <td style={{ padding: '10px' }}>
+            <td className='info-table-text' style={{ padding: '10px' }}>
               {arrival}
             </td>
-            <td style={{ padding: '10px' }}>
+            <td className='info-table-text' style={{ padding: '10px' }}>
               {burst}
             </td>
-            <td style={{ padding: '10px' }}>
+            <td className='info-table-text' style={{ padding: '10px' }}>
               {priority? priority : "N/A"}
             </td>
             
-            <td style={{ padding: '10px' }}>
+            <td className='info-table-text' style={{ padding: '10px' }}>
               {finish}
             </td>
-            <td style={{ padding: '10px' }}>
+            <td className='info-table-text' style={{ padding: '10px' }}>
               {wt}
             </td>
-            <td style={{ padding: '10px' }}>
+            <td className='info-table-text' style={{ padding: '10px' }}>
               {tat}
             </td>
           </tr>
@@ -73,7 +73,7 @@ function SchedulingVisualizer() {
         return users.map(({id, arrival, burst, priority }) => {
         
           return <tr key={id} >
-          <td style={{ padding: '10px'}}>
+          <td  style={{ padding: '10px'}}>
             {id}          
           </td>
           <td style={{ padding: '10px' }}>
@@ -114,14 +114,14 @@ function SchedulingVisualizer() {
       }
 
       const renderInfoHeader = () => {
-        return <tr>
+        return <tr className='info-table-header'>
           {Object.keys(INITIAL_INFO_STATE[0]).map(key => <th className='ptable-header'>{key}</th>)}
         </tr>
       }
 
       const renderInfoTable = () => {
         return (
-          <table className='processTable'>
+          <table className={`processTable info ${isRunning}`}>
             {renderInfoHeader()}
             <tbody>
               {renderInfo()}
@@ -394,6 +394,7 @@ function SchedulingVisualizer() {
     <h1 className='headerText'> CPU Scheduling Visualizer </h1>
     {renderTable()}
 
+    <div className="buttonBox">
     <button className='bar-button' onClick={addRow}> + </button>
     <button className='bar-button' onClick={deleteRow}> - </button>
     <button className='bar-button' onClick={fcfs} disabled={isEmptied}> FCFS </button>
@@ -403,7 +404,7 @@ function SchedulingVisualizer() {
     <button className='bar-button' onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
     <button className='bar-button' onClick={clearTable}> Reset State </button>
     <button className='bar-button' onClick={clearInfoTable}> Clear Info </button>
-
+    </div>
     {array2 && ReturnArray(array2)}
     {infoArray && renderInfoTable(infoArray)}
 
