@@ -15,7 +15,7 @@ function App() {
       
       <BrowserRouter>
       <Routes>
-      <Route path="/" element={<Home  />} />
+      <Route path="/algovisualizer" element={<Home  />} />
 
         <Route path="/sortingvisualizer" element={<Sortingvisualizer  />} />
         <Route path="/schedulingvisualizer" element={<Schedulingvisualizer />} />
