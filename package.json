@@ -1,5 +1,6 @@
 {
   "name": "algovisualizer",
+  "homepage": "http://mohsinrehman.me/algovisualizer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
