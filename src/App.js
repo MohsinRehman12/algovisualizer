@@ -7,13 +7,24 @@ import Schedulingvisualizer from './components/cpuvisualizer/Schedulingvisualize
 import PathVisualizer from './components/pathvisualizer/PathVisualizer';
 import ImgCard from './components/card/Card'
 import Home from './components/pages/Home';
+import { func } from 'prop-types';
+
 
 function App() {
+
+  const [page, setPage] = useState("home");
+  
+  
+
   return (
     <div className="App">
 
-      
-      <BrowserRouter>
+      {page === "home" ? <Home state={page} updatePropState={setPage}/> 
+      : page === "sortingvisualizer" ? <Sortingvisualizer propState={page}  updatePropState={setPage}/>
+      : page === "schedulingvisualizer" ? <Schedulingvisualizer propState={page}  updatePropState={setPage}/>
+      : page === "pathvisualizer" ? <PathVisualizer propState={page} updatePropState={setPage} /> 
+      : null}
+      {/* <BrowserRouter>
       <Routes>
       <Route path="/algovisualizer" element={<Home  />} />
 
@@ -21,7 +32,7 @@ function App() {
         <Route path="/schedulingvisualizer" element={<Schedulingvisualizer />} />
         <Route path="/pathvisualizer" element={<PathVisualizer />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
      
     </div>
   );

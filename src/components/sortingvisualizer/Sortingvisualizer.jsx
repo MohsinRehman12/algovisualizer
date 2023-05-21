@@ -6,7 +6,7 @@ import * as sortingAlgorithms from './algorithms/sortingAlgorithms';
 import * as generalAlgorithms from './algorithms/generalAlgorithms';
 import { Slider } from '@mui/material';
 
-function Sortingvisualizer() {
+function Sortingvisualizer({propState, updatePropState}) {
 
     const [array, setArray] = useState([]);
     const [arraySize, setArraySize] = useState(10);
@@ -627,6 +627,12 @@ function Sortingvisualizer() {
       createArray();
   }
 
+    function handleOnClick(){
+
+      updatePropState("home");
+
+    }
+
   
 
 
@@ -638,6 +644,7 @@ function Sortingvisualizer() {
 
     <div className="header">
       <h1 className='headerText'>Sorting Visualizer</h1>
+      <button onClick={handleOnClick} className='bar-button'>Back To Home</button>
     </div>
 
     <div className="buttonBox">

@@ -15,8 +15,7 @@ import { useState } from 'react';
 
 import './Card.css'
 
-export default function ImgCard({title, description, image, linkTo, sorting, path, scheduling}) {
-
+export default function ImgCard({title, description, image, linkTo, sorting, path, scheduling, propState, updatePropState }) {
 
 
     const [hover, setHover] = useState(false);
@@ -27,6 +26,10 @@ export default function ImgCard({title, description, image, linkTo, sorting, pat
 
     const handleHover = () => {
         setHover(!hover);
+    }
+
+    const handleOnClick = () => {
+      updatePropState(linkTo);
     }
     
   return (
@@ -50,7 +53,7 @@ export default function ImgCard({title, description, image, linkTo, sorting, pat
             {description}
         </Typography>
       </CardContent>
-        <Button href={linkTo} className='button-nav' size="small">Visualize Here</Button>
+        <Button onClick={handleOnClick} className='button-nav' size="small">Visualize Here</Button>
     </Card>
   );
 }

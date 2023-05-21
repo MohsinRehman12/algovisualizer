@@ -7,7 +7,7 @@ import * as BFS from './algorithms/BFS'
 import * as Astar from './algorithms/Astar'
 import * as GreedySearch from './algorithms/GreedySearch'
 import { Slider } from '@mui/material';
-function PathVisualizer() {
+function PathVisualizer({ propState, updatePropState}) {
 
     const [nodes, setNodes] = useState([])
     const [mouseIsPressed, setMouseIsPressed] = useState(false);
@@ -473,7 +473,11 @@ function PathVisualizer() {
     },[endIsReachable])
 
 
+    function handleOnClick(){
 
+        updatePropState("home");
+  
+      }
 
 
 
@@ -483,6 +487,8 @@ function PathVisualizer() {
     <>
     <div className="header">
       <h1 className='headerText'>Pathing Visualizer</h1>
+      <button onClick={handleOnClick} className='bar-button'>Back To Home</button>
+
     </div>
         <div className="buttonBox">
 

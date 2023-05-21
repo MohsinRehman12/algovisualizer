@@ -7,7 +7,7 @@ import * as FCFS from './algorithms/FCFS';
 import * as RR from './algorithms/RoundRobin';
 
 import './scheduling.css'
-function SchedulingVisualizer() {
+function SchedulingVisualizer({ propState, updatePropState}) {
 
     const [array2, setArray2] = useState([]);
     const [clicked, setClicked] = useState(false);
@@ -389,6 +389,11 @@ function SchedulingVisualizer() {
 
 };
 
+function handleOnClick(){
+
+  updatePropState("home");
+
+}
  
   
   
@@ -398,8 +403,10 @@ function SchedulingVisualizer() {
 
   return (
     <>
-
+    <div className='header'>
     <h1 className='headerText'> CPU Scheduling Visualizer </h1>
+    <button onClick={handleOnClick} className='bar-button'>Back To Home</button>
+    </div>
     {renderTable()}
 
     <div className="buttonBox">
