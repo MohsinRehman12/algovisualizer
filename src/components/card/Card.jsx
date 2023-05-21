@@ -5,16 +5,12 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
-import Sortingvisualizer from '../sortingvisualizer/Sortingvisualizer';
-import Schedulingvisualizer from '../cpuvisualizer/Schedulingvisualizer';
-import PathVisualizer from '../pathvisualizer/PathVisualizer';
 import Sortinggif from '../../assets/sorting.gif';
 import Sortingimg from '../../assets/sorting.png';
 import Pathinggif from '../../assets/pathing.gif';
 import Pathingimg from '../../assets/pathing.jpg';
-import Schedulinggif from '../../assets/sorting.gif';
-import Schedulingimg from '../../assets/sorting.png';
+import Schedulinggif from '../../assets/cpu.gif';
+import Schedulingimg from '../../assets/cpu.png';
 import { useState } from 'react';
 
 import './Card.css'

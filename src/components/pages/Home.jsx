@@ -1,7 +1,5 @@
 import React from 'react'
 import ImgCard from '../card/Card'
-import Sortinggif from '../../assets/sorting.gif';
-import Sortingimg from '../../assets/sorting.png';
 
 const Home = () => {
   return (
@@ -27,7 +25,7 @@ const Home = () => {
         title={'CPU Scheduling Visualizer'}
         description={'This is a CPU Scheduling visualizer made using ReactJS. It visualizes the CPU Scheduling algorithms like First Come First Serve (FCFS), Shortest Job First (SJF), Shortest Remaining Time First (SRTF), Priority Scheduling, Round Robin Scheduling'}
         linkTo={'./schedulingvisualizer'}
-        path={true}
+        scheduling={true}
         ></ImgCard>
         </div>
         
