@@ -487,7 +487,7 @@ function PathVisualizer({ propState, updatePropState}) {
     <>
     <div className="header">
       <h1 className='headerText'>Pathing Visualizer</h1>
-      <button onClick={handleOnClick} className='bar-button'>Back To Home</button>
+      <button onClick={handleOnClick} className='bar-button'  disabled={isRunning}>Back To Home</button>
 
     </div>
         <div className="buttonBox">

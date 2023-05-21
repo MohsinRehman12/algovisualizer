@@ -644,7 +644,7 @@ function Sortingvisualizer({propState, updatePropState}) {
 
     <div className="header">
       <h1 className='headerText'>Sorting Visualizer</h1>
-      <button onClick={handleOnClick} className='bar-button'>Back To Home</button>
+      <button onClick={handleOnClick} disabled={isSorting} className='bar-button'>Back To Home</button>
     </div>
 
     <div className="buttonBox">
