@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
+import { Slider } from '@mui/material';
 import * as PriorityAlgoritms from './algorithms/Priority';
 import * as SJF from './algorithms/SJF';
 import * as FCFS from './algorithms/FCFS';
@@ -14,6 +15,7 @@ function SchedulingVisualizer() {
     const [isRunning, setIsRunning] = useState(false);
     const [isEmptied, setIsEmptied] = useState(true);
     const [infoArray, setInfoArray] = useState([]);
+    const [quantum, setQuantum] = useState(3);
 
 
 
@@ -193,7 +195,7 @@ function SchedulingVisualizer() {
     function roundRobinScheduling() {
     setIsRunning(false);
     setInfoArray([]);
-    setArray2(RR.roundRobinScheduling(users, 3, updateUserState, isRunning, updateRunningState));
+    setArray2(RR.roundRobinScheduling(users, quantum, updateUserState, isRunning, updateRunningState));
     setInfoArray(RR.getLocalArray());
     }
 
@@ -262,6 +264,12 @@ function SchedulingVisualizer() {
     useEffect(() => {
       setIsEmptied(!isTableFilled());
     }, [users]);
+
+    function handleSliderChangeQuantum(e) {
+      setQuantum(e.target.value);
+    };
+
+
     
     
 
@@ -403,8 +411,23 @@ function SchedulingVisualizer() {
     <button className='bar-button' onClick={priorityScheduling} disabled={isEmptied}> Priority Preempting</button>
     <button className='bar-button' onClick={roundRobinScheduling} disabled={isEmptied}> Round Robin </button>
     <button className='bar-button' onClick={clearTable}> Reset State </button>
-    <button className='bar-button' onClick={clearInfoTable}> Clear Info </button>
     </div>
+    <h3 className="sliderHeaders"> Time Quantum</h3>
+
+    <Slider
+        defaultValue={3}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        step={1}
+        marks
+        min={1}
+        max={10}
+        onChange={handleSliderChangeQuantum}
+        id='sortbutton9'
+        disabled={isEmptied}
+        className='sort-sliders'
+
+        ></Slider>
     {array2 && ReturnArray(array2)}
     {infoArray && renderInfoTable(infoArray)}
 

@@ -21,6 +21,14 @@ const Home = () => {
         linkTo={'./pathvisualizer'}
         path={true}
         ></ImgCard>
+
+
+        <ImgCard
+        title={'CPU Scheduling Visualizer'}
+        description={'This is a CPU Scheduling visualizer made using ReactJS. It visualizes the CPU Scheduling algorithms like First Come First Serve (FCFS), Shortest Job First (SJF), Shortest Remaining Time First (SRTF), Priority Scheduling, Round Robin Scheduling'}
+        linkTo={'./schedulingvisualizer'}
+        path={true}
+        ></ImgCard>
         </div>
         
     </>
