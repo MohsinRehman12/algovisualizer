@@ -34,8 +34,8 @@ To run this project locally, follow these steps:
 5. Open your browser and visit: http://localhost:3000
 
 ## Usage
--On when you intially load into the site you will be met with this page (shown below) you press visualize here based on what you currently want to visualize and then it will be loaded
--The sections after this futher explain how to use each visualizer
+- On when you intially load into the site you will be met with this page (shown below) you press visualize here based on what you currently want to visualize and then it will be loaded
+- The sections after this futher explain how to use each visualizer
 <img width="785" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/010235ee-497d-44e0-8b7f-b65455b2d061">
 
 
