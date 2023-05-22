@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# Algovisualzer
+## Deployed at http://mohsinrehman.me/algovisualizer/
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+This project is a visualization tool built with React that allows you to visualize various sorting algorithms, pathing/search algorithms, and CPU scheduling algorithms.
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Introduction
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Algovisualizer is a powerful educational tool that helps users understand the inner workings of sorting algorithms, pathing/search algorithms, and CPU scheduling algorithms. By visualizing the algorithms in action, users can gain a deeper understanding of how they operate and make informed decisions when implementing them in their own projects. Instead of creating 3 seperate visualization apps, Algovisualizer contains all of them in 1 app for easier access and future use. More algorithms are planned to be added in the future
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Sorting Algorithm Visualization: Visualize popular sorting algorithms such as Bubble Sort, Insertion Sort, Selection Sort, Merge Sort, Quick Sort, and more.
+- Search Algorithm Visualization: Visualize search algorithms like Linear Search, Binary Search, Depth-First Search (DFS), Breadth-First Search (BFS), and more.
+- CPU Scheduling Visualization: Visualize CPU scheduling algorithms like First-Come, First-Served (FCFS), Shortest Job Next (SJN), Round Robin (RR), and more.
+- Additionally It provides adjustments for animation time and size the visualizer
+- Allows mobile support for all 3 visualizer, however if you are using pathing visualizer we recommend to use your mobile device horozontally
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To run this project locally, follow these steps:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repository: git clone https://github.com/MohsinRehman12/algovisualizer/
+2. Navigate to the project directory: cd algovisualizer
+3. Install the dependencies: npm install
+4. Start the development server: npm start
+5. Open your browser and visit: http://localhost:3000
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Usage
 
-### `npm run eject`
+### Usage of Sorting Visualizer
+- Sorting visualizer comes with a simple UI to view the dataset to be sorted and allows for adjustment of animation speed and array size using the sliders at the bottom (Shown in the image below)
+- Generate Array, generates a random array and then you press any of the button based on the sorting algorithm you want to visualize
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<img width="981" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/0c16d204-da62-4afc-83af-98258438e0b3">
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Usage of Pathing Visualizer
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+-Similar to Sorting visualizer, Pathing Visualizer comes allows for adjustment of animation speed using sliders
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<img width="1204" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/50f2aead-bcb9-4d4f-abd3-a6ee71130c1e">
 
-## Learn More
+-You can move the start node(in green) and goal node(in red) by clicking and dragging them to a desired node
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<img width="1115" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/6405afea-aeed-480f-918c-a7e725d24912">
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+-to add walls (shown in white) you can click on on empty node one at a time, or hold and drag your mouse across the screen in order to draw a line of walls continously as shown below, these walls act as a barrier that the algorithm must navigate around to reach the goal
 
-### Code Splitting
+<img width="1092" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/7211bfdd-5aa7-472c-a9bc-4eb03881ea26">
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+-then you press on the search algortihm you want visualized and then the app will show an animation for the path searched in yellow nodes and the path to goal in blue nodes (an example of BFS is shown below)
 
-### Analyzing the Bundle Size
+<img width="1080" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/d46939b9-cb9b-46a7-bd46-c5db4e5bd33f">
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+### Usage of CPU Scheduling Visualizer
+- CPU Scheduling Visualizer comes with a slider to adjust the time quantum for round robin processes
+- You can fill in the table with non-zero and non-negative numbers for burst and arrival times (app will not let you run otherwise)
+- additionally you can add or remove processes by pressing the respective + or - buttons shown below
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<img width="1085" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/6689c6a9-1b5c-4a2f-83d4-83d0d4601106">
 
-### Advanced Configuration
+-once you have filled in the table correctly you can select any of the CPU scheduling algoritms you want to visualize and you will get a Gantt chart along with information pertaining to the processes an example of Round Robin with a time quantum of 3 is shown below
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+<img width="1074" alt="image" src="https://github.com/MohsinRehman12/algovisualizer/assets/58042011/ccc5981b-de49-47cf-a0e9-9816cafa25f7">
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
